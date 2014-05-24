@@ -186,7 +186,7 @@ jQuery(function() {
 	/*-----------------------------------------------------------------------*/
 	jQuery(window).load(function() { 
 		jQuery('#preloader').fadeOut();
-		jQuery('#preloader-bg').delay(350).fadeOut('slow');
+		jQuery('#preloader-bg').fadeOut('slow');
 	});
 
 
