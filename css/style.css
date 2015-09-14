@@ -324,7 +324,7 @@ header#sub-page .dropdown-hover {color: #c3c7c9;}
     position: relative;
     top: -70px;
     margin: 0 0 -70px 0;
-    height: 375px;/*580px;*/
+    height: 300px;/*580px;*/
     overflow: hidden;
 }
 
@@ -1370,7 +1370,6 @@ address.no-margin {margin-bottom: 0px;}
 --------------------------------*/
 
 footer {
-    margin-top: 9%;
     padding-top: 25px;
     border-top: 1px solid #e3e7e9;
 }
@@ -1381,7 +1380,7 @@ footer p {
     font-size: 14px;
 }
 
-.footer-info {text-align: right;}
+.footer-info {text-align: center;}
 
 p.to-top {color: #b3b7b9;}
 
