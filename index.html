@@ -1,233 +1,300 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-    <!-- META -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kevin Matzen</title>
-	<!-- /META -->
-    
-    <!-- CSS -->
-    <link href='http://fonts.googleapis.com/css?family=Raleway:100,300,400,600,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto:100,300' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" href="css/style.css" />
-	<link rel="stylesheet" href="css/colors.css" />
-	<!-- /CSS -->
+  <meta name="generator" content=
+  "HTML Tidy for HTML5 for Linux version 5.3.1">
+  <meta charset="utf-8">
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1.0">
+  <title>Kevin Matzen</title>
+  <link href=
+  "http://fonts.googleapis.com/css?family=Raleway:100,300,400,600,700"
+  rel="stylesheet" type="text/css">
+  <link href=
+  "http://fonts.googleapis.com/css?family=Roboto:100,300" rel=
+  "stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href=
+  "https://cdn.pannellum.org/2.2/pannellum.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/colors.css">
+  <style>
+  .noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+  }
+  </style>
 </head>
-
 <body id="blue">
-	<!-- Preloader -->
-<!--	<div id="preloader-bg">
-		<div id="preloader"></div>
-	</div>-->
-
-	<header>
-		<div class="container">
-
-			<!-- BEGIN NAVIGATION -->
-			<nav class="navbar custom-nav" role="navigation">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#custom-nav">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">kevin. matzen.</a>
-				</div>
-
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="custom-nav">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#" class="contact">Contact</a></li>
-					</ul>
-				</div><!-- /.navbar-collapse -->
-			</nav>
-		</div>
-
-		<div id="home-slider">
-            <ul id="slides"><li>
-            <div class="bg-image bg1"></div>
-            <div class="overlay color-1"></div>
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-8 col-md-6">
-                        <h1>PhD Student</h1>
-                        <p>vision. graphics. robotics.</p>
-<!--                        <a href="#" class="btn btn-custom yellow portfolio">Check the Portfolio</a>
-                        <a href="#" class="btn btn-custom empty about-me">About Me</a>-->
-                    </div>
-                </div>
-            </div>
-            </li></ul>
-    <!--        <img class="me img-responsive" src="images/me.png" alt="me" />-->
-		</div>
-
-	</header>
-	<!-- /////////////////////////////////////////////////////////////////////////////// -->
-
-	<!-- BEGIN MAIN CONTENT -->
-	<div class="container boxed">
-
-		<div class="row">
-			<h2 class="col-md-8 col-md-offset-2">Using millions of Internet photos to automatically learn about people and the environments they inhabit.</h2>
-		</div>
-
-		<hr id="about-me" class="small" />
-
-		<div class="row">
-			<div class="col-md-12">
-				<h3>The short story about me</h3>
-				<p>I'm a PhD student in computer science advised by <a href="http://www.cs.cornell.edu/~snavely/">Noah Snavely</a> at <a href="http://www.cs.cornell.edu">Cornell University</a>.  My research focuses on building systems that analyze the massive numbers of photos found on social networking sites such as <a href="http://flickr.com">Flickr</a>, <a href="http://facebook.com">Facebook</a>, and <a href="http://instagram.com">Instagram</a> to better understand changes and trends that would be difficult to identify with the naked eye alone.  This work touches on several areas of computer vision such as 3D reconstruction, object recognition, and uses state-of-the-art machine learning techniques.</p>
-				<p>I grew up near a <a href="http://en.wikipedia.org/wiki/Howards_Grove,_Wisconsin">small town</a> in Wisconsin and eventually went to the <a href="http://eecs.umich.edu/">University of Michigan</a> where I obtained BSEs in computer science engineering as well as computer engineering.  When I'm not busy in the realms of vision and graphics, I enjoy using my embedded systems background to tinker with robotics.  Sometimes they even do what I ask.</p>
-			</div>
-		</div>
-
-		<!-- BEGIN Portfolio Recent Items -->
-		<hr id="portfolio" class="small" />
-		<div class="row">
-			<h2 class="col-md-8 col-md-offset-2">Check out my full <a href="kmatzen_resume.pdf">resume</a>.</h2>
-		</div>
-
-		<!-- work 1 -->
-		<div class="row">
-			<div class="col-md-12">
-				<h3>Publications</h3>
-        <p><a href="http://www.cs.cornell.edu/projects/bubblenet/">Matzen, Kevin and Snavely, Noah. <b>BubbLeNet: Foveated imaging for visual discovery.</b>  ICCV 2015.</a></p>
-        <hr class="small"/>
-        <p><a href="http://www.cs.cornell.edu/projects/chronology/">Matzen, Kevin and Snavely, Noah. <b>Scene Chronology.</b> ECCV 2014.</a></p>
-        <hr class="small"/>
-        <p><a href="http://nyc3d.cs.cornell.edu/">Matzen, Kevin and Snavely, Noah. <b>NYC3DCars: A Dataset of 3D Vehicles in Geographic Context.</b> ICCV 2013.</a></p>
-<!--        <div class="row">
-          <div class="col-md-4 col-sm-8 col-xs-8 col-md-offset-0 col-sm-offset-2 col-xs-offset-2">
-              <img src="images/vehicle_annotations.jpg" style="width:100%"></img>
+  <header>
+    <div class="container" style="background-color:#2A8FBD">
+      <nav class="navbar custom-nav" role="navigation">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">kevin. matzen.</a>
+        </div>
+      </nav>
+    </div>
+    <div style="position:relative;padding-left:0;padding-right:0"
+    class="container">
+      <div class="container noselect" style=
+      "position:absolute;left:0;top:0;z-index:1">
+        <div class="row">
+          <div class="col-sm-8 col-md-6">
+            <h1 style=
+            "background-color:rgba(0, 0, 0, 0.75);padding:5px">PhD
+            Student</h1>
+            <h4 style=
+            "background-color:rgba(0, 0, 0, 0.75);padding:5px;color:white">
+            vision. graphics. robotics.</h4>
           </div>
-          <div class="col-md-8 hidden-sm hidden-xs">
-              <img src="images/gis_annotations.jpg" style="width:100%"></img>
-          </div>
-        </div>-->
+        </div>
       </div>
-		</div>
-
-		<hr class="small"/>
-
-		<!-- BEGIN Testimonials -->
-		<div class="row">
-			<h2 class="col-md-8 col-md-offset-2">Places I've interned</h2>
-		</div>
-
-		<div class="row testimonials">
-			<div class="col-md-3 text-center">
-				<span class="client" style="height:200px; background:white url(images/cardboard.png) no-repeat scroll center; background-size: contain"></span>
-				<span class="client-name">Google Cardboard</span>
-				<span class="client-company">Summer 2015</span>
-				<span class="underline"></span>
-				<span class="client-company">virtual reality<br/><a href="https://www.google.com/get/cardboard/jump/">Jump</a><br/>image based rendering</span>
-			</div>
-
-			<div class="col-md-3 text-center">
-				<span class="client" style="height:200px; background:white url(images/google_street_view_pegman.png) no-repeat scroll center; background-size: contain"></span>
-				<span class="client-name">Google Street View</span>
-				<span class="client-company">Summer 2014</span>
-				<span class="underline"></span>
-				<span class="client-company">deep learning</span>
-			</div>
-
-			<div class="col-md-3 text-center">
-				<span class="client" style="height:200px; background:white url(images/microsoft.png) no-repeat scroll center; background-size: contain"></span>
-				<span class="client-name">Windows Azure</span>
-				<span class="client-company">Summer 2009</span>
-				<span class="underline"></span>
-				<span class="client-company">developer experience<br/>APIs</span>
-			</div>
-
-			<div class="col-md-3 text-center">
-				<span class="client" style="height:200px; background:white url(images/ni.jpg) no-repeat scroll center; background-size: contain"></span>
-				<span class="client-name">LabVIEW</span>
-				<span class="client-company">Summer 2008</span>
-				<span class="underline"></span>
-				<span class="client-company">simulation<br/>FPGAs</span>
-			</div>
-		</div>
-		<!-- END Testimonials -->
-
-		<hr id="contact" class="small" />
-
-		<div class="row">
-			<div class="col-md-8">
-                <div id="map"></div>
-            </div>
-
-			<!-- Begin Address -->
-			<div class="col-md-4">
-				<h3>Postal address</h3>
-				<div class="jumbotron custom-jumbotron">
-					<address>
-                        <strong>Cornell University</strong><br>
-                        Department of Computer Science<br>
-                        345 Gates Hall<br>
-                        Ithaca, NY 14853
-					</address>
-
-					<address class="no-margin">
-						<strong>Email Address</strong><br>
-						<a href="mailto:#">kmatzen@cs.cornell.edu</a>
-					</address>
-				</div>
-			</div>
-			<!-- End Address -->
-		</div>
-
-
-		<!-- BEGIN Social Networks -->
-		<div class="row">
-			<div class="col-md-12 text-center">
-				<ul class="social-networks scale-it">
-					<li><a class="twitter" href="https://twitter.com/kmatzen"></a></li>
-					<li><a class="facebook" href="https://www.facebook.com/kmatzen"></a></li>
-					<li><a class="google-plus" href="https://plus.google.com/+KevinMatzen"></a></li>
-					<li><a class="linkedin" href="http://www.linkedin.com/profile/view?id=48116059"></a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- END Social Networks -->
-
-		<!-- /////////////////////////////////////////////////////////////////////////////// -->
-		<footer>
-			<div class="row">
-				<div class="col-sm-6 col-xs-12 col-sm-offset-3 footer-info">
-					<p>Kevin Matzen | Copyright © 2014-15</p>
-					<p class="to-top">Back to Top<a href="#">&nbsp;</a></p>
-				</div>
-			</div>
-		</footer>
-
-	</div><!-- END MAIN CONTENT -->
-
-	<!-- SCRIPTS + JQUERY -->
-	<script src="js/jquery-1.10.2.min.js"></script>
-    <script src="js/jquery.easing.1.3.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
-    <script src="js/default.js"></script>
-
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      <div id="panorama" style=
+      "height:600px;width:100%;position:relative;left:0;top:0;z-index:0">
+      </div>
+    </div>
+  </header>
+  <div class="container boxed">
+    <div class="row">
+      <h2 class="col-md-8 col-md-offset-2">Using millions of
+      Internet photos to automatically learn about people and the
+      environments they inhabit.</h2>
+    </div>
+    <hr id="about-me" class="small">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>The short story about me</h3>
+        <p>I'm a PhD student in computer science advised by
+        <a href="http://www.cs.cornell.edu/~snavely/">Noah
+        Snavely</a> and <a href=
+        "http://www.cs.cornell.edu/~kb/">Kavita Bala</a> at
+        <a href="http://www.cs.cornell.edu">Cornell University</a>.
+        My research focuses on building systems that analyze the
+        massive numbers of photos found on social networking sites
+        such as <a href="http://flickr.com">Flickr</a>, <a href=
+        "http://facebook.com">Facebook</a>, and <a href=
+        "http://instagram.com">Instagram</a> to better understand
+        changes and trends that would be difficult to identify with
+        the naked eye alone. This work touches on several areas of
+        computer vision such as 3D reconstruction, object
+        recognition, and uses state-of-the-art machine learning
+        techniques.</p>
+        <p>I grew up near a <a href=
+        "http://en.wikipedia.org/wiki/Howards_Grove,_Wisconsin">small
+        town</a> in Wisconsin and eventually went to the <a href=
+        "http://eecs.umich.edu/">University of Michigan</a> where I
+        obtained BSEs in computer science engineering as well as
+        computer engineering. When I'm not busy in the realms of
+        vision and graphics, I enjoy using my embedded systems
+        background to tinker with robotics. Sometimes they even do
+        what I ask.</p>
+      </div>
+    </div>
+    <hr id="portfolio" class="small">
+    <div class="row">
+      <h2 class="col-md-8 col-md-offset-2">Check out my full
+      <a href="kmatzen_resume.pdf">resume</a>.</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Publications</h3>
+        <p><a href="http://arxiv.org/abs/1605.02196">P Radecki, M
+        Campbell, K Matzen. <b>All Weather Perception: Joint Data
+        Association, Tracking, and Classification for Autonomous
+        Ground Vehicles.</b> arXiv preprint.</a></p>
+        <hr class="small">
+        <p><a href=
+        "http://www.cs.cornell.edu/projects/bubblenet/">K Matzen, N
+        Snavely. <b>BubbLeNet: Foveated imaging for visual
+        discovery.</b> ICCV 2015.</a></p>
+        <hr class="small">
+        <p><a href=
+        "http://www.cs.cornell.edu/projects/chronology/">K Matzen,
+        N Snavely. <b>Scene Chronology.</b> ECCV 2014.</a></p>
+        <hr class="small">
+        <p><a href="http://nyc3d.cs.cornell.edu/">K Matzen, N
+        Snavely. <b>NYC3DCars: A Dataset of 3D Vehicles in
+        Geographic Context.</b> ICCV 2013.</a></p>
+      </div>
+    </div>
+    <hr class="small">
+    <div class="row">
+      <h2 class="col-md-8 col-md-offset-2">Places I've
+      interned</h2>
+    </div>
+    <div class="row testimonials">
+      <div class="col-md-3 text-center">
+        <div class="client" style=
+        "height:200px; background:white url(images/cardboard.png) no-repeat scroll center; background-size: contain">
+        </div>
+        <div class="client-name">
+          Google Cardboard
+        </div>
+        <div class="client-company">
+          Summer 2015
+        </div>
+        <div class="underline"></div>
+        <div class="client-company">
+          virtual reality<br>
+          <a href=
+          "https://www.google.com/get/cardboard/jump/">Jump</a><br>
+          image based rendering
+        </div>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="client" style=
+        "height:200px; background:white url(images/google_street_view_pegman.png) no-repeat scroll center; background-size: contain">
+        </div>
+        <div class="client-name">
+          Google Street View
+        </div>
+        <div class="client-company">
+          Summer 2014
+        </div>
+        <div class="underline"></div>
+        <div class="client-company">
+          deep learning
+        </div>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="client" style=
+        "height:200px; background:white url(images/microsoft.png) no-repeat scroll center; background-size: contain">
+        </div>
+        <div class="client-name">
+          Windows Azure
+        </div>
+        <div class="client-company">
+          Summer 2009
+        </div>
+        <div class="underline"></div>
+        <div class="client-company">
+          developer experience<br>
+          APIs
+        </div>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="client" style=
+        "height:200px; background:white url(images/ni.jpg) no-repeat scroll center; background-size: contain">
+        </div>
+        <div class="client-name">
+          LabVIEW
+        </div>
+        <div class="client-company">
+          Summer 2008
+        </div>
+        <div class="underline"></div>
+        <div class="client-company">
+          simulation<br>
+          FPGAs
+        </div>
+      </div>
+    </div>
+    <hr id="contact" class="small">
+    <div class="row">
+      <div class="col-md-8">
+        <div id="map"></div>
+      </div>
+      <div class="col-md-4">
+        <h3>Postal address</h3>
+        <div class="jumbotron custom-jumbotron">
+          <address>
+            <strong>Cornell University</strong><br>
+            Department of Computer Science<br>
+            345 Gates Hall<br>
+            Ithaca, NY 14853
+          </address>
+          <address class="no-margin">
+            <strong>Email Address</strong><br>
+            <a href="mailto:#">kmatzen@cs.cornell.edu</a>
+          </address>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <ul class="social-networks scale-it">
+          <li>
+            <a class="twitter" href=
+            "https://twitter.com/kmatzen"></a>
+          </li>
+          <li>
+            <a class="facebook" href=
+            "https://www.facebook.com/kmatzen"></a>
+          </li>
+          <li>
+            <a class="google-plus" href=
+            "https://plus.google.com/+KevinMatzen"></a>
+          </li>
+          <li>
+            <a class="linkedin" href=
+            "http://www.linkedin.com/profile/view?id=48116059"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <footer>
+      <div class="row">
+        <div class=
+        "col-sm-6 col-xs-12 col-sm-offset-3 footer-info">
+          <p>Kevin Matzen | Copyright © 2014-16</p>
+          <p class="to-top">Back to Top<a href="#">&nbsp;</a></p>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="js/jquery-1.10.2.min.js">
+  </script> 
+  <script src="js/jquery.easing.1.3.js">
+  </script> 
+  <script src="js/bootstrap.min.js">
+  </script> 
+  <script src=
+  "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false">
+  </script> 
+  <script src="js/default.js">
+  </script> 
+  <script type="text/javascript" src=
+  "https://cdn.pannellum.org/2.2/pannellum.js">
+  </script> 
+  <script>
+  var pano_list = [
+    "R0010146_20160616150244.JPG",  "R0010155_20160616150640.JPG",
+    "R0010147_20160616150248.JPG",  "R0010156_20160616150644.JPG",
+    "R0010148_20160616150308.JPG",  "R0010157_20160616150818.JPG",
+    "R0010149_20160616150314.JPG",  "R0010158_20160616151018.JPG",
+    "R0010150_20160616150412.JPG",  "R0010159_20160616151048.JPG",
+    "R0010151_20160616150416.JPG",  "R0010160_20160616151052.JPG",
+    "R0010152_20160616150528.JPG",  /*"R0010161_20160616151332.JPG",*/
+    /*"R0010153_20160616150532.JPG",*/  "R0010162_20160616151352.JPG",
+    "R0010154_20160616150618.JPG",  /*"R0010163_20160616151434.JPG"*/
+  ];
+  var selection = pano_list[Math.floor(Math.random() * pano_list.length)];
+  pannellum.viewer("panorama", {
+    "type": "equirectangular",
+    "panorama": "/images/panos/" + selection,
+    "autoLoad": true,
+    "showZoomCtrl": false,
+    "showFullscreenCtrl": false,
+    "compass": true,
+    "yaw": 180,
+    "minHfov": 180,
+    "maxHfov": 180
+    });
+  </script> 
+  <script>
+        (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
 
-        ga('create', 'UA-38604364-5', 'kmatzen.com');
-        ga('send', 'pageview');
+        ga("create", "UA-38604364-5", "kmatzen.com");
+        ga("send", "pageview");
 
-    </script>
-
-    <!-- Twitter Share button JS -->
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-	<!-- /SCRIPTS + JQUERY -->
+  </script>
 </body>
 </html>
