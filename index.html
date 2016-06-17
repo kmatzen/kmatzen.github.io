@@ -56,6 +56,9 @@
       </div>
       <div id="panorama" style=
       "height:400px;width:100%;position:relative;left:0;top:0;z-index:0">
+        <iframe id="pano" width="100%" height="400px" scrolling=
+        "no" allowfullscreen style="border-width:0" name=
+        "pano"></iframe>
       </div>
     </div>
   </header>
@@ -258,9 +261,6 @@
   </script> 
   <script src="js/default.js">
   </script> 
-  <script type="text/javascript" src=
-  "https://cdn.pannellum.org/2.2/pannellum.js">
-  </script> 
   <script>
   var pano_list = [
     "R0010146_20160616150244",  "R0010155_20160616150640",
@@ -274,25 +274,7 @@
     "R0010154_20160616150618",  /*"R0010163_20160616151434"*/
   ];
   var selection = pano_list[Math.floor(Math.random() * pano_list.length)];
-  pannellum.viewer("panorama", {
-    "type": "multires",
-    "multiRes": {
-        "basePath": "/panos/" + selection + "/",
-        "path": "/%l/%s%y_%x",
-        "fallbackPath": "/fallback/%s",
-        "extension": "jpg",
-        "tileResolution": 512,
-        "maxLevel": 3,
-        "cubeResolution": 1704
-    },
-    "autoLoad": true,
-    "showZoomCtrl": false,
-    "showFullscreenCtrl": false,
-    "compass": true,
-    "yaw": 180,
-    "minHfov": 180,
-    "maxHfov": 180
-    });
+  $('#pano').attr('src', "vrview.html?image=images/panos/pow2-" + selection + ".JPG&is_stereo=false&start_yaw=270");
   </script> 
   <script>
         (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
