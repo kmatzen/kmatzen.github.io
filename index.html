@@ -187,17 +187,28 @@ target.appendChild(app.view);
           
   displacementFilter = new PIXI.filters.DisplacementFilter(depthMap, 0);
   app.stage.filters = [displacementFilter];
-  window.onmousemove = function(e) {
+  let update = function(e) {
+var x;
+var y;
+if (e.clientX !== undefined) {
+x = e.clientX;
+y = e.clientY;
+} else {
+x = e.changedTouches[0].clientX;
+y = e.changedTouches[0].clientY;
+}
 let rect = target.getBoundingClientRect();
   let x0 = rect.x;
   let x1 = x0 + 288;
   let y0 = rect.y;
   let y1 = y0 + 384;
-  let x_disp = Math.min(Math.max((e.clientX - x0) / (x1 - x0), 0), 1) - 0.5;
-  let y_disp = Math.min(Math.max((e.clientY - y0) / (y1 - y0), 0), 1) - 0.5;
-  displacementFilter.scale.x = x_disp *10;
-  displacementFilter.scale.y = y_disp *10;
+  let x_disp = Math.min(Math.max((x - x0) / (x1 - x0), 0), 1) - 0.5;
+  let y_disp = Math.min(Math.max((y - y0) / (y1 - y0), 0), 1) - 0.5;
+  displacementFilter.scale.x = -x_disp *10;
+  displacementFilter.scale.y = -y_disp *10;
 };
+window.onmousemove = update;
+window.ontouchmove = update;
 }
 window.addEventListener('load', init);
   </script>
