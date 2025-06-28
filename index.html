@@ -19,31 +19,39 @@
       user-select: none;
     }
 
-.ratio img {
-  width: 100%;
-}
+    .ratio img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
-.ratio iframe {
-  width: 100%;
-  height: 274px;
-  border: none;
-  display: block;
-}
-    
-.card {
-  border: 1px solid #ddd;       /* Light gray border */
-  padding: 1rem;                /* Inner spacing */
-  border-radius: 0.75rem;       /* Optional: rounded corners */
-  background-color: #fff;       /* Ensure clean background */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Optional: soft shadow */
-  margin-bottom: 1.5rem; /* Space between rows */
-}
+    .ratio iframe {
+      width: 100%;
+      height: 274px;
+      border: none;
+      display: block;
+    }
 
-.card-img-bottom {
-    border-radius: 0 0 1rem 1rem;
-    object-fit: cover;
-    max-height: 240px;
-}
+    .card {
+      border: 1px solid #ddd;
+      /* Light gray border */
+      padding: 1rem;
+      /* Inner spacing */
+      border-radius: 0.75rem;
+      /* Optional: rounded corners */
+      background-color: #fff;
+      /* Ensure clean background */
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      /* Optional: soft shadow */
+      margin-bottom: 1.5rem;
+      /* Space between rows */
+    }
+
+    .card-img-bottom {
+      border-radius: 0 0 1rem 1rem;
+      object-fit: cover;
+      max-height: 240px;
+    }
   </style>
 
 </head>
@@ -65,19 +73,25 @@
         <img src="images/IMG_4111_2.jpg" style="width: 300px; height: 400px;" />
       </div>
       <div class="col-md-8">
-<p>
-  I earned my PhD in Computer Science from Cornell University in 2016, where I was advised by
-  <a href="http://www.cs.cornell.edu/~snavely/">Noah Snavely</a> and
-  <a href="http://www.cs.cornell.edu/~kb/">Kavita Bala</a>. My research focused on building systems that analyze large-scale photo collections to reveal patterns, trends, and changes that are difficult to perceive with the naked eye. This work spans multiple areas of computer vision, including 3D reconstruction, object recognition, and machine learning.
-</p>
-<p>
-  I grew up near a
-  <a href="http://en.wikipedia.org/wiki/Howards_Grove,_Wisconsin">small town in Wisconsin</a> and completed my undergraduate studies at the
-  <a href="http://eecs.umich.edu/">University of Michigan</a>, earning dual BSE degrees in Computer Science Engineering and Computer Engineering.
-</p>
-<p>
-  From 2016 to 2021, I worked at Facebook, first on the Computational Photography team and later on the XR Tech team. I’m currently a Senior Research Scientist / Engineer at Adobe in Seattle.
-</p>
+        <p>
+          I earned my PhD in Computer Science from Cornell University in 2016, where I was advised by
+          <a href="http://www.cs.cornell.edu/~snavely/">Noah Snavely</a> and
+          <a href="http://www.cs.cornell.edu/~kb/">Kavita Bala</a>. My research focused on building systems that analyze
+          large-scale photo collections to reveal patterns, trends, and changes that are difficult to perceive with the
+          naked eye. This work spans multiple areas of computer vision, including 3D reconstruction, object recognition,
+          and machine learning.
+        </p>
+        <p>
+          I grew up near a
+          <a href="http://en.wikipedia.org/wiki/Howards_Grove,_Wisconsin">small town in Wisconsin</a> and completed my
+          undergraduate studies at the
+          <a href="http://eecs.umich.edu/">University of Michigan</a>, earning dual BSE degrees in Computer Science
+          Engineering and Computer Engineering.
+        </p>
+        <p>
+          From 2016 to 2021, I worked at Facebook, first on the Computational Photography team and later on the XR Tech
+          team. I’m currently a Senior Research Scientist / Engineer at Adobe in Seattle.
+        </p>
 
       </div>
     </div>
@@ -96,83 +110,88 @@
       <div class="col-md-12">
         <h3 class="mb-4">Publications</h3>
 
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title mb-2">
-                <a href="https://openaccess.thecvf.com/content/CVPR2025/papers/Kee_Removing_Reflections_from_RAW_Photos_CVPR_2025_paper.pdf"
-                  target="_blank">
-                  <strong>Removing Reflections from RAW Photos</strong>
-                </a>
-              </h5>
-              <div class="card-text text-muted small mb-1">E Kee, A Pikielny, K Blackburn‑Matzen, M Levoy</div>
-              <div class="card-text text-muted small mb-1"><em>CVPR 2025</em></div>
-            </div>
-            <div class="ratio ratio-16x9">
-              <iframe src="https://www.youtube.com/embed/XNmyUGD8PVA" title="Removing Reflections from RAW Photos"
-                allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title mb-2">
-                <a href="https://casual-fvs.github.io/" target="_blank">
-                  <strong>Fast View Synthesis of Casual Videos with Soup-of-Planes</strong>
-                </a>
-              </h5>
-              <div class="card-text text-muted small mb-1">YC Lee, Z Zhang, K Blackburn-Matzen, S Niklaus, J Zhang, JB
-                Huang, F Liu</div>
-              <div class="card-text text-muted small mb-1"><em>ECCV 2024</em></div>
-            </div>
-            <div class="ratio ratio-16x9">
-              <iframe src="https://www.youtube.com/embed/e4LrUpUBsMA" title="Soup-of-Planes" allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title mb-2">
-                <a href="https://em-yu.github.io/research/videodoodles/" target="_blank">
-                  <strong>VideoDoodles: Hand-Drawn Animations on Videos with Scene-Aware Canvases</strong>
-                </a>
-              </h5>
-              <div class="card-text text-muted small mb-1">E Yu, K Blackburn-Matzen, C Nguyen, O Wang, RH Kazi, A Bousseau
+        <div class="row g-4 align-items-stretch">
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title mb-2">
+                  <a href="https://openaccess.thecvf.com/content/CVPR2025/papers/Kee_Removing_Reflections_from_RAW_Photos_CVPR_2025_paper.pdf"
+                    target="_blank">
+                    <strong>Removing Reflections from RAW Photos</strong>
+                  </a>
+                </h5>
+                <div class="card-text text-muted small mb-1">E Kee, A Pikielny, K Blackburn‑Matzen, M Levoy</div>
+                <div class="card-text text-muted small mb-1"><em>CVPR 2025</em></div>
               </div>
-              <div class="card-text text-muted small mb-1"><em>SIGGRAPH 2023</em></div>
+              <div class="ratio ratio-16x9">
+                <iframe src="https://www.youtube.com/embed/XNmyUGD8PVA" title="Removing Reflections from RAW Photos"
+                  allowfullscreen></iframe>
+              </div>
             </div>
-            <div class="ratio ratio-16x9">
-              <iframe src="https://www.youtube.com/embed/rN3o8kwX9-8" title="VideoDoodles" allowfullscreen></iframe>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title mb-2">
+                  <a href="https://casual-fvs.github.io/" target="_blank">
+                    <strong>Fast View Synthesis of Casual Videos with Soup-of-Planes</strong>
+                  </a>
+                </h5>
+                <div class="card-text text-muted small mb-1">YC Lee, Z Zhang, K Blackburn-Matzen, S Niklaus, J Zhang, JB
+                  Huang, F Liu</div>
+                <div class="card-text text-muted small mb-1"><em>ECCV 2024</em></div>
+              </div>
+              <div class="ratio ratio-16x9">
+                <iframe src="https://www.youtube.com/embed/e4LrUpUBsMA" title="Soup-of-Planes" allowfullscreen></iframe>
+              </div>
             </div>
           </div>
         </div>
 
-
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title mb-2">
-                <a href="https://jinlinyi.github.io/PerspectiveFields/" target="_blank">
-                  <strong>Perspective Fields for Single Image Camera Calibration</strong>
-                </a>
-              </h5>
-              <div class="card-text text-muted small mb-1">L Jin, J Zhang, Y Hold-Geoffroy, O Wang, K Matzen, M Sticha, DF
-                Fouhey</div>
-              <div class="card-text text-muted small mb-1"><em>CVPR 2023</em></div>
+        <div class="row g-4 align-items-stretch">
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title mb-2">
+                  <a href="https://em-yu.github.io/research/videodoodles/" target="_blank">
+                    <strong>VideoDoodles: Hand-Drawn Animations on Videos with Scene-Aware Canvases</strong>
+                  </a>
+                </h5>
+                <div class="card-text text-muted small mb-1">E Yu, K Blackburn-Matzen, C Nguyen, O Wang, RH Kazi, A
+                  Bousseau
+                </div>
+                <div class="card-text text-muted small mb-1"><em>SIGGRAPH 2023</em></div>
+              </div>
+              <div class="ratio ratio-16x9">
+                <iframe src="https://www.youtube.com/embed/rN3o8kwX9-8" title="VideoDoodles" allowfullscreen></iframe>
+              </div>
             </div>
-            <div class="ratio ratio-16x9">
-              <iframe src="https://www.youtube.com/embed/sN5B_ZvMva8" title="Perspective Fields"
-                allowfullscreen></iframe>
+          </div>
+
+
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title mb-2">
+                  <a href="https://jinlinyi.github.io/PerspectiveFields/" target="_blank">
+                    <strong>Perspective Fields for Single Image Camera Calibration</strong>
+                  </a>
+                </h5>
+                <div class="card-text text-muted small mb-1">L Jin, J Zhang, Y Hold-Geoffroy, O Wang, K Matzen, M
+                  Sticha, DF
+                  Fouhey</div>
+                <div class="card-text text-muted small mb-1"><em>CVPR 2023</em></div>
+              </div>
+              <div class="ratio ratio-16x9">
+                <iframe src="https://www.youtube.com/embed/sN5B_ZvMva8" title="Perspective Fields"
+                  allowfullscreen></iframe>
+              </div>
             </div>
           </div>
         </div>
 
-
+        <div class="row g-4 align-items-stretch">
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
@@ -181,7 +200,8 @@
                   <strong>A Practical Stereo Depth System for Smart Glasses</strong>
                 </a>
               </h5>
-              <div class="card-text text-muted small mb-1">J Wang, D Scharstein, A Bapat, K Blackburn-Matzen, M Yu, J Lehman, S Alsisan, Y Wang, S Tsai, JM Frahm, Z He, P Vajda, MF Cohen, M Uyttendaele</div>
+              <div class="card-text text-muted small mb-1">J Wang, D Scharstein, A Bapat, K Blackburn-Matzen, M Yu, J
+                Lehman, S Alsisan, Y Wang, S Tsai, JM Frahm, Z He, P Vajda, MF Cohen, M Uyttendaele</div>
               <div class="card-text text-muted small mb-1"><em>CVPR 2023</em></div>
             </div>
             <div class="ratio ratio-16x9">
@@ -212,8 +232,9 @@
             </div>
           </div>
         </div>
+      </div>
 
-
+      <div class="row g-4 align-items-stretch">
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
@@ -253,8 +274,9 @@
             </div>
           </div>
         </div>
+      </div>
 
-
+      <div class="row g-4 align-items-stretch">
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
@@ -296,8 +318,9 @@
             </div>
           </div>
         </div>
+      </div>
 
-
+      <div class="row g-4 align-items-stretch">
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
@@ -334,8 +357,8 @@
             </div>
           </div>
         </div>
-
-
+      </div>
+      <div class="row g-4 align-items-stretch">
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
@@ -372,7 +395,8 @@
             </div>
           </div>
         </div>
-
+      </div>
+      <div class="row g-4 align-items-stretch">
 
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
@@ -409,7 +433,8 @@
             </div>
           </div>
         </div>
-
+      </div>
+      <div class="row g-4 align-items-stretch">
 
         <div class="col-md-6">
           <div class="card h-100 shadow-sm">
@@ -445,11 +470,11 @@
             </div>
           </div>
         </div>
-
-
-
       </div>
+
+
     </div>
+  </div>
   </div>
 
   <div class="row">
