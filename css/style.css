@@ -141,8 +141,6 @@ a {
 a:hover {color: #c3c7c9; text-decoration: none;}
 a:focus {outline: 0;}
 
-p {margin: 0 0 20px;}
-
 hr {
     margin: 9% 0;
     border: none;
@@ -1436,5 +1434,3 @@ p.to-top a:hover {
     font-size: 16px;
     font-weight: 600;
 }
-
-
