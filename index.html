@@ -34,7 +34,7 @@
 
     <div class="row">
       <div class="col-md-4">
-        <div id="threed_photo" style="width: 300px; height: 400px;"></div>
+        <img src="images/IMG_4111_2.jpg" style="width: 300px; height: 400px;"/>
       </div>
       <div class="col-md-8">
         <p>
@@ -48,7 +48,7 @@
           <a href="http://eecs.umich.edu/">University of Michigan</a>, where I earned BSEs in Computer Science Engineering and Computer Engineering.
         </p>
         <p>
-          From 2016 to 2021, I was part of the Computational Photography team and, later, the XR Tech team at Facebook. I am currently a Senior Research Scientist at Adobe in Seattle.
+          From 2016 to 2021, I was part of the Computational Photography team and, later, the XR Tech team at Facebook. I am currently a Senior Research Scientist/Engineer at Adobe in Seattle.
         </p>
       </div>      
     </div>
@@ -106,47 +106,5 @@
       </div>
     </footer>
   </div>
-
-  <script src="js/jquery-1.10.2.min.js"></script>
-  <script src="js/pixi.min.js"></script>
-  <script>
-    function init() {
-      let target = document.querySelector('#threed_photo');
-      var width = 300;
-      var height = 400;
-      let app = new PIXI.Application({width: width, height: height});
-      target.appendChild(app.view);
-      let img = new PIXI.Sprite.from("images/IMG_4111_2.jpg");
-      img.width = width;
-      img.height = height;
-      app.stage.addChild(img);
-      let depthMap = new PIXI.Sprite.from("images/depth2.png");
-      app.stage.addChild(depthMap);
-
-      let displacementFilter = new PIXI.filters.DisplacementFilter(depthMap, 0);
-      app.stage.filters = [displacementFilter];
-
-      let update = function(e) {
-        var x, y;
-        if (e.clientX !== undefined) {
-          x = e.clientX;
-          y = e.clientY;
-        } else {
-          x = e.changedTouches[0].clientX;
-          y = e.changedTouches[0].clientY;
-        }
-        let rect = target.getBoundingClientRect();
-        let x_disp = Math.min(Math.max((x - rect.left) / rect.width, 0), 1) - 0.5;
-        let y_disp = Math.min(Math.max((y - rect.top) / rect.height, 0), 1) - 0.5;
-        displacementFilter.scale.x = -x_disp * 10;
-        displacementFilter.scale.y = -y_disp * 10;
-      };
-
-      window.onmousemove = update;
-      window.ontouchmove = update;
-    }
-
-    window.addEventListener('load', init);
-  </script>
 </body>
 </html>
