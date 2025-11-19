@@ -14,7 +14,7 @@
   <meta property="og:url" content="https://kmatzen.com/">
   <meta property="og:title" content="Kevin Blackburn-Matzen - Computer Vision & AI Researcher">
   <meta property="og:description" content="Senior Research Scientist at Adobe specializing in controllable image and video generation, 3D vision, and computational photography. ECCV Best Paper Award winner.">
-  <meta property="og:image" content="https://kmatzen.com/images/IMG_4111_2.jpg">
+  <meta property="og:image" content="https://kmatzen.com/images/daytime.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   
@@ -23,7 +23,7 @@
   <meta name="twitter:url" content="https://kmatzen.com/">
   <meta name="twitter:title" content="Kevin Blackburn-Matzen - Computer Vision & AI Researcher">
   <meta name="twitter:description" content="Senior Research Scientist at Adobe specializing in controllable image and video generation, 3D vision, and computational photography.">
-  <meta name="twitter:image" content="https://kmatzen.com/images/IMG_4111_2.jpg">
+  <meta name="twitter:image" content="https://kmatzen.com/images/daytime.jpg">
   
   <!-- Additional Meta Tags -->
   <meta name="robots" content="index, follow">
@@ -41,7 +41,7 @@
     "name": "Kevin Blackburn-Matzen",
     "alternateName": "Kevin Matzen",
     "url": "https://kmatzen.com",
-    "image": "https://kmatzen.com/images/IMG_4111_2.jpg",
+    "image": "https://kmatzen.com/images/daytime.jpg",
     "jobTitle": "Senior Research Scientist/Engineer",
     "worksFor": {
       "@type": "Organization",
@@ -290,14 +290,38 @@
       margin-bottom: 3rem;
     }
 
-    .profile-img {
+    .profile-img-container {
+      position: relative;
       width: 100%;
       max-width: 280px;
-      height: auto;
       aspect-ratio: 3/4;
-      object-fit: cover;
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .profile-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease;
+      opacity: 1;
+    }
+
+    .profile-img.fade-out {
+      opacity: 0;
+    }
+
+    .profile-img.fade-in {
+      opacity: 1;
+    }
+
+    #profileImgBottom {
+      opacity: 0;
+      visibility: hidden;
     }
 
     .bio-text {
@@ -799,10 +823,9 @@
         border-radius: 0.5rem;
       }
 
-      .profile-img {
+      .profile-img-container {
         max-width: 200px;
         margin: 0 auto 1.5rem;
-        display: block;
       }
 
       h3 {
@@ -854,7 +877,10 @@
 
     <div class="row profile-section">
       <div class="col-md-4">
-        <img src="images/IMG_4111_2.jpg" class="profile-img" alt="Kevin Blackburn-Matzen" />
+        <div class="profile-img-container">
+          <img src="images/daytime.jpg" class="profile-img" id="profileImgBottom" alt="Kevin Blackburn-Matzen" />
+          <img src="images/daytime.jpg" class="profile-img" id="profileImgTop" alt="Kevin Blackburn-Matzen" />
+        </div>
       </div>
       <div class="col-md-8 bio-text">
         <p>
@@ -1334,6 +1360,15 @@
     const themeIcon = document.getElementById('themeIcon');
     const html = document.documentElement;
     
+    // Preload both profile images for seamless transitions
+    const daytimeImg = new Image();
+    const nightImg = new Image();
+    daytimeImg.src = 'images/daytime.jpg';
+    nightImg.src = 'images/night.jpg';
+    
+    // Track if a transition is in progress
+    let isTransitioning = false;
+    
     // Check for saved theme preference or use system preference
     function getPreferredTheme() {
       const savedTheme = localStorage.getItem('theme');
@@ -1344,14 +1379,87 @@
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     
-    function setTheme(theme) {
+    function setTheme(theme, skipTransition = false) {
+      // Prevent overlapping transitions
+      if (isTransitioning && !skipTransition) {
+        return;
+      }
+      
       html.setAttribute('data-theme', theme);
       themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      
+      // Switch profile image based on theme with smooth crossfade
+      const profileImgTop = document.getElementById('profileImgTop');
+      const profileImgBottom = document.getElementById('profileImgBottom');
+      
+      if (profileImgTop && profileImgBottom) {
+        const newSrc = theme === 'dark' ? 'images/night.jpg' : 'images/daytime.jpg';
+        
+        // Only change if the source is different
+        if (profileImgTop.src.indexOf(newSrc) === -1) {
+          if (skipTransition) {
+            // No transition on initial load
+            profileImgTop.src = newSrc;
+            profileImgBottom.src = newSrc;
+            profileImgTop.style.opacity = '1';
+            profileImgBottom.style.opacity = '0';
+            profileImgBottom.style.visibility = 'hidden';
+          } else {
+            // Mark transition as in progress
+            isTransitioning = true;
+            
+            // Ensure the new image is fully loaded before starting crossfade
+            const tempImg = new Image();
+            tempImg.onload = () => {
+              // Set the bottom image to the new source and ensure it starts at opacity 0
+              profileImgBottom.src = newSrc;
+              profileImgBottom.style.opacity = '0';
+              profileImgBottom.style.visibility = 'visible';
+              
+              // Force a reflow to ensure the image is rendered
+              void profileImgBottom.offsetWidth;
+              
+              // Use double requestAnimationFrame to ensure both transitions start together
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  // Simultaneously: fade out top image AND fade in bottom image
+                  profileImgTop.style.opacity = '0';
+                  profileImgBottom.style.opacity = '1';
+                });
+              });
+              
+              // After transition completes, swap them back WITHOUT triggering another transition
+              setTimeout(() => {
+                // Temporarily disable transitions
+                profileImgTop.style.transition = 'none';
+                profileImgBottom.style.transition = 'none';
+                
+                // Update sources and opacity
+                profileImgTop.src = newSrc;
+                profileImgTop.style.opacity = '1';
+                profileImgBottom.style.opacity = '0';
+                profileImgBottom.style.visibility = 'hidden';
+                
+                // Force reflow
+                void profileImgTop.offsetWidth;
+                
+                // Re-enable transitions
+                profileImgTop.style.transition = '';
+                profileImgBottom.style.transition = '';
+                
+                // Mark transition as complete
+                isTransitioning = false;
+              }, 350);
+            };
+            tempImg.src = newSrc;
+          }
+        }
+      }
     }
     
-    // Initialize theme
+    // Initialize theme without transition
     const initialTheme = getPreferredTheme();
-    setTheme(initialTheme);
+    setTheme(initialTheme, true);
     
     // Listen for system theme changes (if user hasn't manually set a preference)
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
