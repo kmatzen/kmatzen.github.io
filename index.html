@@ -89,6 +89,23 @@
   </script>
   
   <style>
+    /* Skip link for accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary-color);
+      color: white;
+      padding: 8px 16px;
+      z-index: 100;
+      text-decoration: none;
+      border-radius: 0 0 4px 0;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
     /* Minimal grid system */
     * {
       box-sizing: border-box;
@@ -234,7 +251,8 @@
     h3 {
       font-weight: 700;
       color: var(--text-primary);
-      margin-bottom: 2rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
       font-size: 1.875rem;
       transition: color 0.3s ease;
     }
@@ -287,7 +305,7 @@
     }
 
     .profile-section {
-      margin-bottom: 3rem;
+      margin-bottom: 0;
     }
 
     .profile-img-container {
@@ -343,7 +361,6 @@
       border-radius: var(--radius-lg);
       font-size: 1.0625rem;
       transition: all 0.2s ease, background 0.3s ease, border-color 0.3s ease;
-      margin-bottom: 3rem;
     }
 
     .contact-info:hover {
@@ -363,13 +380,38 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      font-size: 0.9375rem;
-      transition: all 0.2s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* News List */
+    .news-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+    }
+
+    .news-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .news-list li:last-child {
+      border-bottom: none;
+    }
+
+    .news-date {
+      display: inline-block;
+      min-width: 80px;
       color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .news-list a {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .news-list a:hover {
+      color: var(--primary-color);
     }
 
     .social-link:hover {
@@ -839,7 +881,7 @@
 
       h3 {
         font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.75rem;
       }
 
       .bio-text {
@@ -870,6 +912,7 @@
 </head>
 
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
     <div class="container">
       <nav class="navbar custom-nav" role="navigation">
@@ -882,7 +925,7 @@
       </nav>
     </div>
   </header>
-  <div class="container boxed">
+  <main id="main-content" class="container boxed">
 
     <div class="row profile-section">
       <div class="col-md-4">
@@ -930,6 +973,18 @@
       </div>
     </div>
 
+    <!-- News & Updates -->
+    <div class="row">
+      <div class="col-md-12">
+        <h3>News</h3>
+        <ul class="news-list">
+          <li><span class="news-date">Feb 2026</span> <a href="https://oindrilasaha.github.io/3DScratchpad/">3D Space as a Scratchpad</a> accepted to <strong>CVPR 2026</strong></li>
+          <li><span class="news-date">Jan 2026</span> <a href="https://oindrilasaha.github.io/sigma-gen/">SIGMA-Gen</a> accepted to <strong>ICLR 2026</strong></li>
+          <li><span class="news-date">Oct 2025</span> <a href="https://oindrilasaha.github.io/">Oindrila Saha</a> presented <a href="https://www.adobe.com/max/2025/sessions/project-scene-it-gs3-6.html">Project Scene It</a> at <strong>MAX Sneaks 2025</strong></li>
+        </ul>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-12">
         <h3>Publications</h3>
@@ -965,7 +1020,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/3dscratchpad.png" loading="lazy" alt="3D Scratchpad Teaser">
+              <picture>
+                <source srcset="/images/3dscratchpad.webp" type="image/webp">
+                <img src="/images/3dscratchpad.png" loading="lazy" alt="3D Scratchpad Teaser">
+              </picture>
             </div>
           </div>
 
@@ -984,7 +1042,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/teaser_refined.jpg" loading="lazy" alt="SIGMA-Gen Visualization">
+              <picture>
+                <source srcset="/images/teaser_refined.webp" type="image/webp">
+                <img src="/images/teaser_refined.jpg" loading="lazy" alt="SIGMA-Gen Visualization">
+              </picture>
             </div>
           </div>
 
@@ -1161,7 +1222,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/geostyle.jpg" loading="lazy" alt="GeoStyle Visualization">
+              <picture>
+                <source srcset="/images/geostyle.webp" type="image/webp">
+                <img src="/images/geostyle.jpg" loading="lazy" alt="GeoStyle Visualization">
+              </picture>
             </div>
           </div>
 
@@ -1201,7 +1265,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/burst.jpg" loading="lazy" alt="Deep Burst Denoising">
+              <picture>
+                <source srcset="/images/burst.webp" type="image/webp">
+                <img src="/images/burst.jpg" loading="lazy" alt="Deep Burst Denoising">
+              </picture>
             </div>
           </div>
 
@@ -1239,7 +1306,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/stereo.jpg" loading="lazy" alt="Low-cost 360 stereo photography and video capture">
+              <picture>
+                <source srcset="/images/stereo.webp" type="image/webp">
+                <img src="/images/stereo.jpg" loading="lazy" alt="Low-cost 360 stereo photography and video capture">
+              </picture>
             </div>
           </div>
 
@@ -1258,7 +1328,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/streetstyle_small.jpg" loading="lazy" alt="StreetStyle visual map">
+              <picture>
+                <source srcset="/images/streetstyle_small.webp" type="image/webp">
+                <img src="/images/streetstyle_small.jpg" loading="lazy" alt="StreetStyle visual map">
+              </picture>
             </div>
           </div>
 
@@ -1278,7 +1351,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/skynet.jpg" loading="lazy" alt="All Weather Perception: Joint Data Association, Tracking, and Classification for Autonomous Ground Vehicles">
+              <picture>
+                <source srcset="/images/skynet.webp" type="image/webp">
+                <img src="/images/skynet.jpg" loading="lazy" alt="All Weather Perception">
+              </picture>
             </div>
           </div>
 
@@ -1296,7 +1372,10 @@
               </div>
             </div>
             <div class="ratio ratio-16x9">
-              <img src="/images/bubblenet_small.jpg" loading="lazy" alt="BubbLeNet image">
+              <picture>
+                <source srcset="/images/bubblenet_small.webp" type="image/webp">
+                <img src="/images/bubblenet_small.jpg" loading="lazy" alt="BubbLeNet image">
+              </picture>
             </div>
           </div>
 
@@ -1346,7 +1425,7 @@
 
       </div>
     </div>
-  </div>
+  </main>
 
   <footer>
     <p>&copy; 2014-25 Kevin Blackburn-Matzen</p>
