@@ -31,6 +31,8 @@
   <link rel="canonical" href="https://kmatzen.com/">
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Structured Data -->
@@ -762,6 +764,13 @@
       transition: all 0.3s ease, background 0.3s ease, border-color 0.3s ease;
       display: flex;
       flex-direction: column;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .card:hover {
@@ -990,16 +999,16 @@
         <h3>Publications</h3>
 
         <div class="filter-container">
-          <div class="filter-buttons" id="filterButtons">
-            <button class="filter-btn active" data-filter="all">All <span class="count"></span></button>
-            <button class="filter-btn" data-filter="3d-vision">3D Vision <span class="count"></span></button>
-            <button class="filter-btn" data-filter="computational-photography">Computational Photography <span class="count"></span></button>
-            <button class="filter-btn" data-filter="generative-ai">Generative AI <span class="count"></span></button>
-            <button class="filter-btn" data-filter="video">Video Processing <span class="count"></span></button>
-            <button class="filter-btn" data-filter="depth">Depth Estimation <span class="count"></span></button>
-            <button class="filter-btn" data-filter="detection">Detection <span class="count"></span></button>
-            <button class="filter-btn" data-filter="trend-analysis">Trend Analysis <span class="count"></span></button>
-            <button class="filter-btn" data-filter="robotics">Robotics <span class="count"></span></button>
+          <div class="filter-buttons" id="filterButtons" role="group" aria-label="Filter publications by category">
+            <button class="filter-btn active" data-filter="all" aria-pressed="true">All <span class="count"></span></button>
+            <button class="filter-btn" data-filter="3d-vision" aria-pressed="false">3D Vision <span class="count"></span></button>
+            <button class="filter-btn" data-filter="computational-photography" aria-pressed="false">Computational Photography <span class="count"></span></button>
+            <button class="filter-btn" data-filter="generative-ai" aria-pressed="false">Generative AI <span class="count"></span></button>
+            <button class="filter-btn" data-filter="video" aria-pressed="false">Video Processing <span class="count"></span></button>
+            <button class="filter-btn" data-filter="depth" aria-pressed="false">Depth Estimation <span class="count"></span></button>
+            <button class="filter-btn" data-filter="detection" aria-pressed="false">Detection <span class="count"></span></button>
+            <button class="filter-btn" data-filter="trend-analysis" aria-pressed="false">Trend Analysis <span class="count"></span></button>
+            <button class="filter-btn" data-filter="robotics" aria-pressed="false">Robotics <span class="count"></span></button>
           </div>
         </div>
 
@@ -1650,11 +1659,15 @@
     // Handle filter button clicks
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Remove active class from all buttons
-        filterButtons.forEach(b => b.classList.remove('active'));
+        // Remove active class and aria-pressed from all buttons
+        filterButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         
-        // Add active class to clicked button
+        // Add active class and aria-pressed to clicked button
         btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
         
         // Filter publications
         const selectedFilter = btn.getAttribute('data-filter');
@@ -1751,6 +1764,28 @@
         if (wrapper) wrapper.classList.remove('skeleton');
       });
     });
+
+    // Scroll animations for publication cards
+    const cards = document.querySelectorAll('.card');
+    if ('IntersectionObserver' in window) {
+      const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('visible');
+            }, index * 50);
+            cardObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      cards.forEach(card => cardObserver.observe(card));
+    } else {
+      cards.forEach(card => card.classList.add('visible'));
+    }
 
   </script>
 </body>
