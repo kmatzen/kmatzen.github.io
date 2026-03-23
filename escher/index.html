@@ -13,10 +13,12 @@
       background: #111;
       color: #ddd;
       font-family: system-ui, -apple-system, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem 1rem 3rem;
+      padding: 1rem 1.5rem 3rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
     }
     h1 {
       font-size: 1.4rem;
@@ -27,32 +29,38 @@
     .subtitle {
       font-size: 0.85rem;
       opacity: 0.6;
-      margin-bottom: 1.25rem;
+      margin: 0;
     }
-    canvas {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #333;
-      cursor: grab;
-      touch-action: none;
+
+    /* --- 4-col × 2-row grid: fig 4 is 2×2, others 1×1 --- */
+    .app {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      gap: 0.75rem;
+      max-width: 960px;
+      margin: 0 auto;
     }
-    canvas:active { cursor: grabbing; }
-    .previews {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.25rem;
-      justify-content: center;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-    .panel {
+
+    .main-panel {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.4rem;
     }
-    .panel h2 {
+    .main-panel canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      border: 1px solid #333;
+      cursor: grab;
+      touch-action: none;
+    }
+    .main-panel canvas:active { cursor: grabbing; }
+    .main-panel h2 {
       font-size: 0.72rem;
       font-weight: 600;
       margin: 0;
@@ -60,88 +68,114 @@
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .panel h2 {
+      font-size: 0.68rem;
+      font-weight: 600;
+      margin: 0;
+      opacity: 0.88;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
     .panel canvas {
-      cursor: default;
-      aspect-ratio: 1 / 1;
-      width: min(280px, 100%);
+      display: block;
+      width: 100%;
       height: auto;
+      aspect-ratio: 1 / 1;
+      border: 1px solid #333;
+      cursor: default;
+      touch-action: none;
     }
-    .panel.main {
-      margin-bottom: 0.5rem;
-    }
-    .panel.main canvas {
-      cursor: grab;
-      max-width: min(900px, 90vw);
-    }
-    .panel.main canvas:active {
-      cursor: grabbing;
-    }
+
+    /* Controls in a 1×1 cell */
     .controls {
       display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 0.75rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.6rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      align-self: start;
     }
     .controls label {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.82rem;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+    .controls label span:first-child,
+    .controls label:first-line {
+      min-width: 4em;
     }
     .controls input[type="range"] {
-      width: 180px;
+      flex: 1;
+      min-width: 0;
       accent-color: #888;
     }
     .controls .value {
-      min-width: 3.5em;
+      min-width: 3.2em;
       text-align: right;
       font-variant-numeric: tabular-nums;
+      font-size: 0.72rem;
+      opacity: 0.7;
+    }
+    .controls .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
     }
     .controls button {
       background: #333;
       color: #ddd;
       border: 1px solid #555;
       border-radius: 4px;
-      padding: 0.3rem 0.75rem;
-      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.72rem;
       cursor: pointer;
       transition: background 0.15s;
     }
-    .controls button:hover {
-      background: #444;
-    }
-    .controls button:active {
-      background: #555;
-    }
+    .controls button:hover { background: #444; }
+    .controls button:active { background: #555; }
     .controls button.active {
       background: #4a6a4a;
       border-color: #6a9a6a;
     }
+    .controls select {
+      background: #222;
+      color: #ddd;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 0.2rem 0.3rem;
+      font-size: 0.72rem;
+    }
+
+    /* Explanation below the grid */
     .explanation {
       max-width: 52rem;
+      margin: 1.5rem auto 0;
       font-size: 0.88rem;
       line-height: 1.6;
       opacity: 0.88;
-      margin-top: 1rem;
     }
     .explanation h3 {
       font-size: 1rem;
       margin: 0 0 0.5rem;
       opacity: 1;
     }
-    .explanation p {
-      margin: 0.5rem 0;
-    }
+    .explanation p { margin: 0.5rem 0; }
     .explanation .step {
       margin: 0.6rem 0;
       padding-left: 1.25rem;
       border-left: 2px solid #444;
     }
-    .explanation .step b {
-      color: #ccc;
-    }
+    .explanation .step b { color: #ccc; }
     .explanation .interaction {
       margin-top: 1rem;
       padding: 0.75rem 1rem;
@@ -150,82 +184,107 @@
       font-size: 0.82rem;
       line-height: 1.6;
     }
-    .explanation .interaction b {
-      color: #ccc;
-    }
+    .explanation .interaction b { color: #ccc; }
+
     .footer {
       margin-top: 1.5rem;
       font-size: 0.78rem;
       opacity: 0.45;
       text-align: center;
       max-width: 40rem;
+      margin-left: auto;
+      margin-right: auto;
       line-height: 1.5;
     }
-    .footer a {
-      color: #8ab;
-      text-decoration: none;
-    }
-    .footer a:hover {
-      text-decoration: underline;
-    }
+    .footer a { color: #8ab; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
     code { font-size: 0.88em; background: rgba(255,255,255,0.06); padding: 0.1em 0.3em; border-radius: 3px; }
+
+    /* Responsive: stack on narrow screens */
+    @media (max-width: 700px) {
+      .app {
+        grid-template-columns: 1fr 1fr;
+      }
+      .main-panel {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Droste Effect Explorer</h1>
-  <p class="subtitle">Interactive visualization of Escher's recursive spiral</p>
+  <header>
+    <h1>Droste Effect Explorer</h1>
+    <p class="subtitle">Interactive visualization of Escher's recursive spiral</p>
+  </header>
 
-  <div class="previews">
+  <div class="app">
+    <div class="main-panel">
+      <h2>Droste Spiral</h2>
+      <canvas id="c" width="1800" height="1800"></canvas>
+    </div>
+
     <div class="panel">
-      <h2>1. Recursive image</h2>
-      <canvas id="source" width="280" height="280"></canvas>
+      <h2>Source</h2>
+      <canvas id="source" width="560" height="560"></canvas>
     </div>
     <div class="panel">
-      <h2>2. Log-polar view</h2>
-      <canvas id="log" width="280" height="280"></canvas>
+      <h2>Log-Polar</h2>
+      <canvas id="log" width="560" height="560"></canvas>
     </div>
     <div class="panel">
-      <h2>3. Aligned (α · ζ)</h2>
-      <canvas id="logAligned" width="280" height="280"></canvas>
+      <h2>Aligned</h2>
+      <canvas id="logAligned" width="560" height="560"></canvas>
     </div>
-  </div>
 
-  <div class="controls">
-    <label>
-      rotation
-      <input type="range" id="alphaAngle" min="-3.1416" max="3.1416" step="0.0001">
-      <span class="value" id="alphaAngleVal"></span>
-    </label>
-    <label>
-      scale
-      <input type="range" id="alphaScale" min="0.05" max="5" step="0.0001">
-      <span class="value" id="alphaScaleVal"></span>
-    </label>
-    <span class="presets">
-      <button id="presetIdentity">Identity</button>
-      <button id="presetDroste">CCW Spiral</button>
-      <button id="presetPrintGallery">CW Spiral</button>
-      <button id="btnAnimate">Animate</button>
-    </span>
-  </div>
-
-  <div class="panel main">
-    <h2>4. Exponential map (Droste effect)</h2>
-    <canvas id="c" width="900" height="900"></canvas>
+    <div class="controls">
+        <label>
+          rotation
+          <input type="range" id="alphaAngle" min="-3.1416" max="3.1416" step="0.0001">
+          <span class="value" id="alphaAngleVal"></span>
+        </label>
+        <label>
+          scale
+          <input type="range" id="alphaScale" min="0.05" max="5" step="0.0001">
+          <span class="value" id="alphaScaleVal"></span>
+        </label>
+        <div class="btn-row">
+          <button id="presetIdentity">Identity</button>
+          <button id="presetDroste">CCW Spiral</button>
+          <button id="presetPrintGallery">CW Spiral</button>
+          <button id="btnAnimate">Animate</button>
+          <button id="btnHole" class="active">Hole</button>
+        </div>
+        <label>
+          levels/turn
+          <select id="levelsPerTurn">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="8">8</option>
+          </select>
+        </label>
+        <label>
+          outpaint
+          <input type="range" id="outpaintK" min="2" max="8" step="0.1" value="3.5">
+          <span class="value" id="outpaintKVal">3.5</span>
+        </label>
+      </div>
   </div>
 
   <div class="explanation">
     <h3>How it works</h3>
     <div class="step">
       <p>
-        <b>1. Recursive image.</b> The source scene contains a smaller copy of itself,
-        embedded by the similarity S(z) = c + a&middot;z with scale |a| = &frac14;.
+        <b>Source.</b> A procedurally generated scene contains a smaller copy of itself,
+        embedded by the similarity S(z) = c + a&middot;z with scale |a| = 1/16.
         This creates a picture-within-a-picture that repeats infinitely inward.
       </p>
     </div>
     <div class="step">
       <p>
-        <b>2. Log-polar transform.</b> Mapping to <code>ζ = ln r + i&middot;θ</code>
+        <b>Log-Polar.</b> Mapping to <code>ζ = ln r + i&middot;θ</code>
         converts the multiplicative self-similarity into additive periodicity:
         the image tiles with period ln(1/|a|) along the horizontal axis (radius) and
         2π along the vertical axis (angle). Circles around the center become vertical
@@ -234,33 +293,35 @@
     </div>
     <div class="step">
       <p>
-        <b>3. Conformal alignment.</b> Multiplying by a complex number α performs a
-        rotation and isotropic scaling of the log-polar plane. The key insight: choosing α
-        so that the vector from one copy to the next (one radial period + one full turn)
-        maps to a pure vertical shift of 2πi makes the recursion seamlessly periodic.
+        <b>Aligned.</b> Multiplying by a complex number α performs a
+        rotation and isotropic scaling of the log-polar plane. Following Lenstra and de Smit,
+        the alignment condition α&middot;Δζ&nbsp;=&nbsp;2πi shears the periodic strip so
+        that the self-similar copies line up vertically. With 1 level per turn the zoom
+        factor is 16, giving Δζ&nbsp;=&nbsp;(ln&nbsp;16,&nbsp;2π) and
+        <code>α = 2πi / (ln 16 + 2πi)</code>.
         The sliders let you explore different α values; the presets compute the exact
         alignment for clockwise and counter-clockwise spirals.
       </p>
     </div>
     <div class="step">
       <p>
-        <b>4. Exponential map.</b> Applying <code>exp</code> to the aligned ζ&prime;
+        <b>Droste Spiral.</b> Applying <code>exp</code> to the aligned ζ&prime;
         coordinates wraps the periodic strip back into polar form, producing the Droste
         spiral. Each pixel's screen position determines its ζ&prime; coordinates; the
-        shader tiles, divides by α, and traces back through the recursion to sample
-        the source texture. The result is a seamless spiral zoom that Escher
+        shader tiles, divides by α, and traces back through the recursion to render
+        the scene procedurally. The result is a seamless spiral zoom that Escher
         approximated by hand in his 1956 lithograph <em>Print Gallery</em>.
       </p>
     </div>
     <div class="interaction">
-      <b>Interact:</b> Hover any panel to see corresponding structures across all four views &mdash;
-      circles ↔ vertical lines, radial rays ↔ horizontal lines, spirals ↔ tilted lines.
-      Drag to pan panel 4; scroll to zoom. Use the sliders or presets to change α in real time.
+      <b>Interact:</b> Drag to pan the Droste spiral; scroll to zoom.
+      Use the sliders or presets to change α in real time.
     </div>
   </div>
 
   <p class="footer">
-    Based on the analysis of Escher's <em>Print Gallery</em> by
+    Inspired by <a href="https://www.youtube.com/watch?v=ldxFjLJ3rVY">3Blue1Brown's video</a>
+    on the Droste effect. Based on the analysis of Escher's <em>Print Gallery</em> by
     H. Lenstra, B. de Smit, and collaborators at Leiden University.
     Built with WebGL 2.
   </p>

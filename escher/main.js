@@ -1,4 +1,4 @@
-import { VERT_SRC, FRAG_DROSTE_SRC, FRAG_LOG_SRC, FRAG_LOG_ALIGNED_SRC } from "./shaders.js";
+import { VERT_SRC, FRAG_SOURCE_SRC, FRAG_DROSTE_SRC, FRAG_LOG_SRC, FRAG_LOG_ALIGNED_SRC } from "./shaders.js";
 
 function compile(gl, type, src) {
   const sh = gl.createShader(type);
@@ -46,157 +46,6 @@ function bindQuadAttribs(gl, program, vao) {
   gl.vertexAttribPointer(locPos, 2, gl.FLOAT, false, 0, 0);
 }
 
-/**
- * Raster recursive inset: axis-aligned copy, w = c + a·z in ℂ with a = s real.
- * c is the bottom-left corner of the inner square in UV; inner must lie in [0,1]².
- * @param {number} size
- * @param {{ re: number, im: number }} c
- * @param {{ re: number, im: number }} a  — must be real (im = 0)
- */
-function makeRecursiveTexture(size, c, a) {
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext("2d");
-
-
-  function drawLevel(depth, scale, offsetX, offsetY) {
-    if (depth <= 0) return;
-    const s = scale;
-    ctx.save();
-    ctx.translate(offsetX, offsetY);
-    ctx.scale(s, s);
-
-    // Sky gradient
-    const sky = ctx.createLinearGradient(0, 0, 0, size * 0.55);
-    sky.addColorStop(0, "#4a7fb5");
-    sky.addColorStop(1, "#a8d0e6");
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, size, size * 0.55);
-
-    // Clouds
-    ctx.fillStyle = "rgba(255,255,255,0.6)";
-    for (const [cx, cy, r] of [[0.2, 0.12, 0.05], [0.24, 0.10, 0.04], [0.17, 0.11, 0.035],
-                                 [0.75, 0.18, 0.045], [0.79, 0.16, 0.035], [0.72, 0.17, 0.03]]) {
-      ctx.beginPath();
-      ctx.arc(size * cx, size * cy, size * r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Sun
-    ctx.fillStyle = "#f0d060";
-    ctx.beginPath();
-    ctx.arc(size * 0.88, size * 0.08, size * 0.04, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Ground
-    const ground = ctx.createLinearGradient(0, size * 0.55, 0, size);
-    ground.addColorStop(0, "#6b8e5a");
-    ground.addColorStop(1, "#3d5c2e");
-    ctx.fillStyle = ground;
-    ctx.fillRect(0, size * 0.55, size, size * 0.45);
-
-    // Checkerboard path
-    const pathLeft = size * 0.3;
-    const pathRight = size * 0.7;
-    const horizon = size * 0.55;
-    const vanishX = size * 0.5;
-    const rows = 8;
-    for (let i = 0; i < rows; i++) {
-      const t0 = i / rows;
-      const t1 = (i + 1) / rows;
-      const y0 = horizon + (size - horizon) * t0;
-      const y1 = horizon + (size - horizon) * t1;
-      const x0L = vanishX + (pathLeft - vanishX) * t0;
-      const x0R = vanishX + (pathRight - vanishX) * t0;
-      const x1L = vanishX + (pathLeft - vanishX) * t1;
-      const x1R = vanishX + (pathRight - vanishX) * t1;
-      const cols = 4;
-      for (let j = 0; j < cols; j++) {
-        const fL0 = x0L + (x0R - x0L) * (j / cols);
-        const fR0 = x0L + (x0R - x0L) * ((j + 1) / cols);
-        const fL1 = x1L + (x1R - x1L) * (j / cols);
-        const fR1 = x1L + (x1R - x1L) * ((j + 1) / cols);
-        ctx.fillStyle = (i + j) % 2 === 0 ? "#d4c9a8" : "#8b7355";
-        ctx.beginPath();
-        ctx.moveTo(fL0, y0);
-        ctx.lineTo(fR0, y0);
-        ctx.lineTo(fR1, y1);
-        ctx.lineTo(fL1, y1);
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
-
-    // Building left
-    ctx.fillStyle = "#c4956a";
-    ctx.fillRect(size * 0.02, size * 0.2, size * 0.22, size * 0.35);
-    ctx.fillStyle = "#a07050";
-    ctx.fillRect(size * 0.05, size * 0.25, size * 0.06, size * 0.08);
-    ctx.fillRect(size * 0.15, size * 0.25, size * 0.06, size * 0.08);
-    ctx.fillRect(size * 0.05, size * 0.38, size * 0.06, size * 0.08);
-    ctx.fillRect(size * 0.15, size * 0.38, size * 0.06, size * 0.08);
-
-    // Building right
-    ctx.fillStyle = "#b8c4d0";
-    ctx.fillRect(size * 0.76, size * 0.15, size * 0.22, size * 0.4);
-    ctx.fillStyle = "#8b4040";
-    ctx.beginPath();
-    ctx.moveTo(size * 0.74, size * 0.15);
-    ctx.lineTo(size * 0.87, size * 0.05);
-    ctx.lineTo(size * 1.0, size * 0.15);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = "#7090a0";
-    ctx.fillRect(size * 0.80, size * 0.22, size * 0.05, size * 0.07);
-    ctx.fillRect(size * 0.90, size * 0.22, size * 0.05, size * 0.07);
-    ctx.fillRect(size * 0.80, size * 0.35, size * 0.05, size * 0.07);
-    ctx.fillRect(size * 0.90, size * 0.35, size * 0.05, size * 0.07);
-
-    // Tree
-    ctx.fillStyle = "#5c3a1e";
-    ctx.fillRect(size * 0.62, size * 0.3, size * 0.03, size * 0.25);
-    ctx.fillStyle = "#3a6b2a";
-    ctx.beginPath();
-    ctx.arc(size * 0.635, size * 0.25, size * 0.08, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#4a7b38";
-    ctx.beginPath();
-    ctx.arc(size * 0.65, size * 0.28, size * 0.06, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Billboard matches the recursion region: c=(0.375,0.375), a=0.25
-    const bx = c.re * size, by = c.im * size;
-    const bw = a.re * size, bh = a.re * size;
-    // Recurse into the billboard
-    const sc = a.re;
-    const tx = c.re * size;
-    const ty = c.im * size;
-    ctx.save();
-    ctx.transform(sc, 0, 0, sc, tx, ty);
-    drawLevel(depth - 1, 1, 0, 0);
-    ctx.restore();
-
-    // Posts and frame (drawn after recursion so they're on top)
-    ctx.fillStyle = "#6b5030";
-    const postW = bw * 0.08;
-    ctx.fillRect(bx + bw * 0.08, by + bh, postW, size * 0.75 - (by + bh));
-    ctx.fillRect(bx + bw * 0.84, by + bh, postW, size * 0.75 - (by + bh));
-    ctx.strokeStyle = "#5c3a1e";
-    ctx.lineWidth = size * 0.006;
-    ctx.strokeRect(bx, by, bw, bh);
-    ctx.strokeStyle = "#8b6914";
-    ctx.lineWidth = size * 0.003;
-    ctx.strokeRect(bx + size * 0.005, by + size * 0.005, bw - size * 0.01, bh - size * 0.01);
-
-    ctx.restore();
-  }
-
-  const RECURSION_DEPTH = 8;
-  drawLevel(RECURSION_DEPTH, 1, 0, 0);
-
-  return canvas;
-}
-
 function main() {
   const canvas = document.getElementById("c");
   const sourceCanvas = document.getElementById("source");
@@ -204,71 +53,50 @@ function main() {
   const logAlignedCanvas = document.getElementById("logAligned");
 
   const gl = canvas.getContext("webgl2", { alpha: false, antialias: true });
+  const glSrc = sourceCanvas.getContext("webgl2", { alpha: false, antialias: true });
   const glLog = logCanvas.getContext("webgl2", { alpha: false, antialias: true });
   const glLogAligned = logAlignedCanvas.getContext("webgl2", { alpha: false, antialias: true });
-  if (!gl || !glLog || !glLogAligned) {
+  if (!gl || !glSrc || !glLog || !glLogAligned) {
     alert("WebGL2 required");
     return;
   }
 
   const program = createProgram(gl, VERT_SRC, FRAG_DROSTE_SRC);
+  const programSrc = createProgram(glSrc, VERT_SRC, FRAG_SOURCE_SRC);
   const programLog = createProgram(glLog, VERT_SRC, FRAG_LOG_SRC);
   const programLogAligned = createProgram(glLogAligned, VERT_SRC, FRAG_LOG_ALIGNED_SRC);
 
   const mainQuad = setupQuad(gl);
+  const srcQuad = setupQuad(glSrc);
   const logQuad = setupQuad(glLog);
   const logAlignedQuad = setupQuad(glLogAligned);
   bindQuadAttribs(gl, program, mainQuad.vao);
+  bindQuadAttribs(glSrc, programSrc, srcQuad.vao);
   bindQuadAttribs(glLog, programLog, logQuad.vao);
   bindQuadAttribs(glLogAligned, programLogAligned, logAlignedQuad.vao);
 
-  const tex = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-  /** Centered recursion: c = ((1−s)/2, (1−s)/2); inner square centered in the frame. */
-  const insetScale = 1 / 4;
-  const cEmb = { re: 0.5 * (1 - insetScale), im: 0.5 * (1 - insetScale) };
+  /** Recursive copy is always centered at (0.5, 0.5). */
+  const insetScale = 1 / 16;
+  const cEmb = { re: 0.5 - insetScale / 2, im: 0.5 - insetScale / 2 };
   const aEmb = { re: insetScale, im: 0 };
 
-  const raster = makeRecursiveTexture(2048, cEmb, aEmb);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, raster);
+  let currentK = 3.5;
 
-  /** Second context cannot use the main context's texture object; duplicate upload. */
-  const texLog = glLog.createTexture();
-  glLog.bindTexture(glLog.TEXTURE_2D, texLog);
-  glLog.texParameteri(glLog.TEXTURE_2D, glLog.TEXTURE_MIN_FILTER, glLog.LINEAR);
-  glLog.texParameteri(glLog.TEXTURE_2D, glLog.TEXTURE_MAG_FILTER, glLog.LINEAR);
-  glLog.texParameteri(glLog.TEXTURE_2D, glLog.TEXTURE_WRAP_S, glLog.CLAMP_TO_EDGE);
-  glLog.texParameteri(glLog.TEXTURE_2D, glLog.TEXTURE_WRAP_T, glLog.CLAMP_TO_EDGE);
-  glLog.pixelStorei(glLog.UNPACK_FLIP_Y_WEBGL, true);
-  glLog.texImage2D(glLog.TEXTURE_2D, 0, glLog.RGBA, glLog.RGBA, glLog.UNSIGNED_BYTE, raster);
+  // --- Scene uniform computation ---
+  function computeSceneUniforms(K) {
+    const cropNormX = Math.max(0, 0.75 - 0.5 / K);
+    const cropNormY = Math.max(0, 0.25 - 0.5 / K);
+    const cropSize = 1.0 / K;
+    const bbSize = aEmb.re; // insetScale
+    const frameNormW = K * aEmb.re;
+    const frameNormX = cEmb.re - cropNormX * frameNormW;
+    const frameNormY = cEmb.im - cropNormY * frameNormW;
+    const bbX = cropNormX + frameNormX * cropSize;
+    const bbY = cropNormY + frameNormY * cropSize;
+    return { cropNormX, cropNormY, cropSize, bbX, bbY, bbSize };
+  }
 
-  const texLogAligned = glLogAligned.createTexture();
-  glLogAligned.bindTexture(glLogAligned.TEXTURE_2D, texLogAligned);
-  glLogAligned.texParameteri(glLogAligned.TEXTURE_2D, glLogAligned.TEXTURE_MIN_FILTER, glLogAligned.LINEAR);
-  glLogAligned.texParameteri(glLogAligned.TEXTURE_2D, glLogAligned.TEXTURE_MAG_FILTER, glLogAligned.LINEAR);
-  glLogAligned.texParameteri(glLogAligned.TEXTURE_2D, glLogAligned.TEXTURE_WRAP_S, glLogAligned.CLAMP_TO_EDGE);
-  glLogAligned.texParameteri(glLogAligned.TEXTURE_2D, glLogAligned.TEXTURE_WRAP_T, glLogAligned.CLAMP_TO_EDGE);
-  glLogAligned.pixelStorei(glLogAligned.UNPACK_FLIP_Y_WEBGL, true);
-  glLogAligned.texImage2D(
-    glLogAligned.TEXTURE_2D,
-    0,
-    glLogAligned.RGBA,
-    glLogAligned.RGBA,
-    glLogAligned.UNSIGNED_BYTE,
-    raster
-  );
-
-  const srcCtx = sourceCanvas.getContext("2d");
-  srcCtx.imageSmoothingEnabled = true;
-  srcCtx.drawImage(raster, 0, 0, sourceCanvas.width, sourceCanvas.height);
-
-  const uTex = gl.getUniformLocation(program, "u_tex");
+  // --- Uniform locations: Droste (panel 4) ---
   const uRes = gl.getUniformLocation(program, "u_resolution");
   const uPolarOrigin = gl.getUniformLocation(program, "u_polarOrigin");
   const uCenter = gl.getUniformLocation(program, "u_center");
@@ -278,8 +106,20 @@ function main() {
   const uViewScale = gl.getUniformLocation(program, "u_viewScale");
   const uPeriod = gl.getUniformLocation(program, "u_period");
   const uLnPeriod = gl.getUniformLocation(program, "u_lnPeriod");
+  const uHoleRadius = gl.getUniformLocation(program, "u_holeRadius");
+  const uSceneCropSize = gl.getUniformLocation(program, "u_sceneCropSize");
+  const uSceneCropOffset = gl.getUniformLocation(program, "u_sceneCropOffset");
+  const uSceneBBPos = gl.getUniformLocation(program, "u_sceneBBPos");
+  const uSceneBBSize = gl.getUniformLocation(program, "u_sceneBBSize");
 
-  const uTexLog = glLog.getUniformLocation(programLog, "u_tex");
+  // --- Uniform locations: Source preview (panel 1) ---
+  const uResSrc = glSrc.getUniformLocation(programSrc, "u_resolution");
+  const uSceneCropSizeSrc = glSrc.getUniformLocation(programSrc, "u_sceneCropSize");
+  const uSceneCropOffsetSrc = glSrc.getUniformLocation(programSrc, "u_sceneCropOffset");
+  const uSceneBBPosSrc = glSrc.getUniformLocation(programSrc, "u_sceneBBPos");
+  const uSceneBBSizeSrc = glSrc.getUniformLocation(programSrc, "u_sceneBBSize");
+
+  // --- Uniform locations: Log-polar (panel 2) ---
   const uResLog = glLog.getUniformLocation(programLog, "u_resolution");
   const uPolarOriginLog = glLog.getUniformLocation(programLog, "u_polarOrigin");
   const uCenterLog = glLog.getUniformLocation(programLog, "u_center");
@@ -288,8 +128,12 @@ function main() {
   const uRMaxLog = glLog.getUniformLocation(programLog, "u_rMax");
   const uThetaMinLog = glLog.getUniformLocation(programLog, "u_thetaMin");
   const uThetaMaxLog = glLog.getUniformLocation(programLog, "u_thetaMax");
+  const uSceneCropSizeLog = glLog.getUniformLocation(programLog, "u_sceneCropSize");
+  const uSceneCropOffsetLog = glLog.getUniformLocation(programLog, "u_sceneCropOffset");
+  const uSceneBBPosLog = glLog.getUniformLocation(programLog, "u_sceneBBPos");
+  const uSceneBBSizeLog = glLog.getUniformLocation(programLog, "u_sceneBBSize");
 
-  const uTexLogAligned = glLogAligned.getUniformLocation(programLogAligned, "u_tex");
+  // --- Uniform locations: Log-aligned (panel 3) ---
   const uResLogAligned = glLogAligned.getUniformLocation(programLogAligned, "u_resolution");
   const uPolarOriginAligned = glLogAligned.getUniformLocation(programLogAligned, "u_polarOrigin");
   const uCenterAligned = glLogAligned.getUniformLocation(programLogAligned, "u_center");
@@ -299,55 +143,54 @@ function main() {
   const uZetaEdgeU = glLogAligned.getUniformLocation(programLogAligned, "u_zetaEdgeU");
   const uZetaEdgeV = glLogAligned.getUniformLocation(programLogAligned, "u_zetaEdgeV");
   const uLnPeriodAligned = glLogAligned.getUniformLocation(programLogAligned, "u_lnPeriod");
+  const uSceneCropSizeAligned = glLogAligned.getUniformLocation(programLogAligned, "u_sceneCropSize");
+  const uSceneCropOffsetAligned = glLogAligned.getUniformLocation(programLogAligned, "u_sceneCropOffset");
+  const uSceneBBPosAligned = glLogAligned.getUniformLocation(programLogAligned, "u_sceneBBPos");
+  const uSceneBBSizeAligned = glLogAligned.getUniformLocation(programLogAligned, "u_sceneBBSize");
 
   /** Polar map around image center (0.5, 0.5); recursion unwind still uses c (u_center). */
   const polarOrigin = { x: 0.5, y: 0.5 };
-  const corners = [
-    [0, 0],
-    [1, 0],
-    [0, 1],
-    [1, 1],
-  ];
+  const corners = [[0, 0], [1, 0], [0, 1], [1, 1]];
   let rMaxPolarBase = 0;
   for (const [x, y] of corners) {
-    rMaxPolarBase = Math.max(
-      rMaxPolarBase,
-      Math.hypot(x - polarOrigin.x, y - polarOrigin.y)
-    );
+    rMaxPolarBase = Math.max(rMaxPolarBase, Math.hypot(x - polarOrigin.x, y - polarOrigin.y));
   }
-  /** >1 widens the ln(r) axis so the polar view is zoomed out radially. */
   const polarRadialZoomOut = 2;
   const rMaxPolar = rMaxPolarBase * polarRadialZoomOut;
   const rMinPolar = 0.002;
 
   const L0 = Math.log(rMinPolar);
   const L1 = Math.log(rMaxPolar);
-  /** ζ = ln r + i·θ; both axes in natural units (nepers / radians) for conformal α·ζ. */
   const lnRange = L1 - L0;
   const thetaMin = -lnRange / 2;
   const thetaMax = lnRange / 2;
-  /**
-   * α in polar form: α = scale · e^(iθ). Sliders control angle and magnitude.
-   * Default: rotation=0, scale=1 (identity). Correct alignment at α·(4ln4 + 2πi) = 2πi.
-   */
-  // Droste preset: α = 2πi / (ln(4) + 2πi)
-  // 1 radial level inward per angular turn, CCW spiral
-  const c1 = Math.log(4);
-  const denom = c1 * c1 + 4 * Math.PI * Math.PI;
-  const drosteAlphaRe = 4 * Math.PI * Math.PI / denom;
-  const drosteAlphaIm = 2 * Math.PI * c1 / denom;
-  const drosteAngle = Math.atan2(drosteAlphaIm, drosteAlphaRe);
-  const drosteScale = Math.hypot(drosteAlphaRe, drosteAlphaIm);
 
-  const defaultAlphaAngle = drosteAngle;
-  const defaultAlphaScale = drosteScale;
+  const levelsSelect = document.getElementById("levelsPerTurn");
+
+  function computeSpiralPresets(nLevels) {
+    const zoomPerTurn = Math.pow(1 / insetScale, nLevels);
+    const c1 = Math.log(zoomPerTurn);
+    const denom = c1 * c1 + 4 * Math.PI * Math.PI;
+    const ccwRe = 4 * Math.PI * Math.PI / denom;
+    const ccwIm = 2 * Math.PI * c1 / denom;
+    const cwRe = ccwRe;
+    const cwIm = -ccwIm;
+    return {
+      ccwAngle: Math.atan2(ccwIm, ccwRe),
+      ccwScale: Math.hypot(ccwRe, ccwIm),
+      cwAngle: Math.atan2(cwIm, cwRe),
+      cwScale: Math.hypot(cwRe, cwIm),
+    };
+  }
+
+  let presets = computeSpiralPresets(parseInt(levelsSelect.value));
 
   const angleSlider = document.getElementById("alphaAngle");
   const scaleSlider = document.getElementById("alphaScale");
   const angleVal = document.getElementById("alphaAngleVal");
   const scaleVal = document.getElementById("alphaScaleVal");
-  angleSlider.value = defaultAlphaAngle;
-  scaleSlider.value = defaultAlphaScale;
+  angleSlider.value = presets.ccwAngle;
+  scaleSlider.value = presets.ccwScale;
 
   let alphaLog = { re: 0, im: 0 };
   let zetaA = { re: 0, im: 0 };
@@ -362,13 +205,9 @@ function main() {
     scaleVal.textContent = scale.toFixed(4);
 
     alphaLog = { re: scale * Math.cos(angle), im: scale * Math.sin(angle) };
-
-    // Fixed viewport in ζ' space — same extent as panel 2's ζ-space so α's effect is visible
     zetaA = { re: L0, im: thetaMin };
     zetaEdgeU = { re: L1 - L0, im: 0 };
     zetaEdgeV = { re: 0, im: thetaMax - thetaMin };
-
-    // Droste period = 2π (one full turn in radians, the natural θ period)
     drostePeriod = 2 * Math.PI;
   }
 
@@ -390,19 +229,25 @@ function main() {
   });
 
   document.getElementById("presetDroste").addEventListener("click", () => {
-    applyPreset(drosteAngle, drosteScale);
+    applyPreset(presets.ccwAngle, presets.ccwScale);
   });
 
-  // Print Gallery preset: α = 2πi / (-ln(4) + 2πi)
-  // 1 radial level inward per angular turn, CW spiral
-  const pgDenom = c1 * c1 + 4 * Math.PI * Math.PI;
-  const pgAlphaRe = 4 * Math.PI * Math.PI / pgDenom;
-  const pgAlphaIm = -2 * Math.PI * c1 / pgDenom;
-  const pgAngle = Math.atan2(pgAlphaIm, pgAlphaRe);
-  const pgScale = Math.hypot(pgAlphaRe, pgAlphaIm);
-
   document.getElementById("presetPrintGallery").addEventListener("click", () => {
-    applyPreset(pgAngle, pgScale);
+    applyPreset(presets.cwAngle, presets.cwScale);
+  });
+
+  levelsSelect.addEventListener("change", () => {
+    presets = computeSpiralPresets(parseInt(levelsSelect.value));
+    applyPreset(presets.ccwAngle, presets.ccwScale);
+  });
+
+  // --- Outpaint K slider ---
+  const outpaintSlider = document.getElementById("outpaintK");
+  const outpaintVal = document.getElementById("outpaintKVal");
+  outpaintSlider.addEventListener("input", () => {
+    currentK = parseFloat(outpaintSlider.value);
+    outpaintVal.textContent = currentK.toFixed(1);
+    draw();
   });
 
   // --- Animation ---
@@ -412,17 +257,13 @@ function main() {
 
   function animationLoop(t) {
     if (!animating) return;
-    // Slowly rotate α: ~0.3 rad/sec
     let angle = parseFloat(angleSlider.value) + 0.005;
-    // Wrap to (-π, π] robustly (handles long-backgrounded tabs)
     angle = angle - 2 * Math.PI * Math.floor((angle + Math.PI) / (2 * Math.PI));
     angleSlider.value = angle;
     updateAlpha();
     draw();
     animRAF = requestAnimationFrame(animationLoop);
   }
-
-  // Don't save hash every frame during animation (too noisy), but save on stop
 
   animBtn.addEventListener("click", () => {
     animating = !animating;
@@ -434,6 +275,15 @@ function main() {
       if (animRAF) cancelAnimationFrame(animRAF);
       saveHash();
     }
+  });
+
+  // --- Central hole toggle ---
+  let showHole = true;
+  const holeBtn = document.getElementById("btnHole");
+  holeBtn.addEventListener("click", () => {
+    showHole = !showHole;
+    holeBtn.classList.toggle("active", showHole);
+    draw();
   });
 
   // --- URL hash state ---
@@ -459,11 +309,8 @@ function main() {
     return false;
   }
 
-  // Save hash whenever sliders change
   angleSlider.addEventListener("input", saveHash);
   scaleSlider.addEventListener("input", saveHash);
-
-  // Load from hash on startup (after presets are defined)
   loadHash();
 
   // --- Pinch-to-zoom on panel 4 ---
@@ -492,7 +339,6 @@ function main() {
         const factor = oldDist / newDist;
         viewScale = Math.min(8, Math.max(0.35, viewScale * factor));
       }
-      // Also pan from midpoint movement
       const oldMid = { x: (prev[0].x + prev[1].x) / 2, y: (prev[0].y + prev[1].y) / 2 };
       const newMid = { x: (t0.clientX + t1.clientX) / 2, y: (t0.clientY + t1.clientY) / 2 };
       const rect = canvas.getBoundingClientRect();
@@ -500,7 +346,6 @@ function main() {
       const dy = -(newMid.y - oldMid.y) / rect.height;
       viewCenter.x -= dx * viewScale;
       viewCenter.y -= dy * viewScale;
-
       for (const t of e.touches) touches.set(t.identifier, { x: t.clientX, y: t.clientY });
       draw();
     }
@@ -511,7 +356,15 @@ function main() {
   let dragging = false;
   let last = { x: 0, y: 0 };
 
-  function setViewUniforms(glCtx, resW, resH) {
+  // --- Helper: set scene uniforms on a GL context ---
+  function setSceneUniforms(glCtx, locs, su) {
+    glCtx.uniform1f(locs.cropSize, su.cropSize);
+    glCtx.uniform2f(locs.cropOffset, su.cropNormX, su.cropNormY);
+    glCtx.uniform2f(locs.bbPos, su.bbX, su.bbY);
+    glCtx.uniform1f(locs.bbSize, su.bbSize);
+  }
+
+  function setViewUniforms(glCtx, resW, resH, su) {
     glCtx.uniform2f(uRes, resW, resH);
     glCtx.uniform2f(uPolarOrigin, polarOrigin.x, polarOrigin.y);
     glCtx.uniform2f(uCenter, cEmb.re, cEmb.im);
@@ -521,9 +374,16 @@ function main() {
     glCtx.uniform1f(uViewScale, viewScale);
     glCtx.uniform1f(uPeriod, drostePeriod);
     glCtx.uniform1f(uLnPeriod, Math.log(1 / Math.hypot(aEmb.re, aEmb.im)));
+    glCtx.uniform1f(uHoleRadius, showHole ? 0.12 : 0.0);
+    setSceneUniforms(glCtx, {
+      cropSize: uSceneCropSize,
+      cropOffset: uSceneCropOffset,
+      bbPos: uSceneBBPos,
+      bbSize: uSceneBBSize,
+    }, su);
   }
 
-  function setLogUniforms() {
+  function setLogUniforms(su) {
     glLog.uniform2f(uResLog, logCanvas.width, logCanvas.height);
     glLog.uniform2f(uPolarOriginLog, polarOrigin.x, polarOrigin.y);
     glLog.uniform2f(uCenterLog, cEmb.re, cEmb.im);
@@ -532,9 +392,15 @@ function main() {
     glLog.uniform1f(uRMaxLog, rMaxPolar);
     glLog.uniform1f(uThetaMinLog, thetaMin);
     glLog.uniform1f(uThetaMaxLog, thetaMax);
+    setSceneUniforms(glLog, {
+      cropSize: uSceneCropSizeLog,
+      cropOffset: uSceneCropOffsetLog,
+      bbPos: uSceneBBPosLog,
+      bbSize: uSceneBBSizeLog,
+    }, su);
   }
 
-  function setLogAlignedUniforms() {
+  function setLogAlignedUniforms(su) {
     glLogAligned.uniform2f(uResLogAligned, logAlignedCanvas.width, logAlignedCanvas.height);
     glLogAligned.uniform2f(uPolarOriginAligned, polarOrigin.x, polarOrigin.y);
     glLogAligned.uniform2f(uCenterAligned, cEmb.re, cEmb.im);
@@ -544,40 +410,61 @@ function main() {
     glLogAligned.uniform2f(uZetaEdgeU, zetaEdgeU.re, zetaEdgeU.im);
     glLogAligned.uniform2f(uZetaEdgeV, zetaEdgeV.re, zetaEdgeV.im);
     glLogAligned.uniform1f(uLnPeriodAligned, Math.log(1 / Math.hypot(aEmb.re, aEmb.im)));
+    setSceneUniforms(glLogAligned, {
+      cropSize: uSceneCropSizeAligned,
+      cropOffset: uSceneCropOffsetAligned,
+      bbPos: uSceneBBPosAligned,
+      bbSize: uSceneBBSizeAligned,
+    }, su);
+  }
+
+  function setSrcUniforms(su) {
+    glSrc.uniform2f(uResSrc, sourceCanvas.width, sourceCanvas.height);
+    setSceneUniforms(glSrc, {
+      cropSize: uSceneCropSizeSrc,
+      cropOffset: uSceneCropOffsetSrc,
+      bbPos: uSceneBBPosSrc,
+      bbSize: uSceneBBSizeSrc,
+    }, su);
   }
 
   function draw() {
+    const su = computeSceneUniforms(currentK);
+
+    // Panel 1: Source preview
+    glSrc.viewport(0, 0, sourceCanvas.width, sourceCanvas.height);
+    glSrc.clearColor(0.05, 0.05, 0.06, 1);
+    glSrc.clear(glSrc.COLOR_BUFFER_BIT);
+    glSrc.useProgram(programSrc);
+    glSrc.bindVertexArray(srcQuad.vao);
+    setSrcUniforms(su);
+    glSrc.drawArrays(glSrc.TRIANGLES, 0, 6);
+
+    // Panel 4: Droste
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.05, 0.05, 0.06, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(program);
     gl.bindVertexArray(mainQuad.vao);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.uniform1i(uTex, 0);
-    setViewUniforms(gl, canvas.width, canvas.height);
+    setViewUniforms(gl, canvas.width, canvas.height, su);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
+    // Panel 2: Log-polar
     glLog.viewport(0, 0, logCanvas.width, logCanvas.height);
     glLog.clearColor(0.05, 0.05, 0.06, 1);
     glLog.clear(glLog.COLOR_BUFFER_BIT);
     glLog.useProgram(programLog);
     glLog.bindVertexArray(logQuad.vao);
-    glLog.activeTexture(glLog.TEXTURE0);
-    glLog.bindTexture(glLog.TEXTURE_2D, texLog);
-    glLog.uniform1i(uTexLog, 0);
-    setLogUniforms();
+    setLogUniforms(su);
     glLog.drawArrays(glLog.TRIANGLES, 0, 6);
 
+    // Panel 3: Aligned
     glLogAligned.viewport(0, 0, logAlignedCanvas.width, logAlignedCanvas.height);
     glLogAligned.clearColor(0.05, 0.05, 0.06, 1);
     glLogAligned.clear(glLogAligned.COLOR_BUFFER_BIT);
     glLogAligned.useProgram(programLogAligned);
     glLogAligned.bindVertexArray(logAlignedQuad.vao);
-    glLogAligned.activeTexture(glLogAligned.TEXTURE0);
-    glLogAligned.bindTexture(glLogAligned.TEXTURE_2D, texLogAligned);
-    glLogAligned.uniform1i(uTexLogAligned, 0);
-    setLogAlignedUniforms();
+    setLogAlignedUniforms(su);
     glLogAligned.drawArrays(glLogAligned.TRIANGLES, 0, 6);
   }
 
@@ -614,7 +501,6 @@ function main() {
   );
 
   // --- Interactive hover overlays ---
-  // Overlay canvases positioned over each target using fixed positioning + JS sync.
   function makeOverlay(target) {
     const overlay = document.createElement("canvas");
     overlay.width = target.width;
@@ -646,11 +532,9 @@ function main() {
   const lnPeriod = Math.log(1 / Math.hypot(aEmb.re, aEmb.im));
   const TAU = 2 * Math.PI;
 
-  // Lattice dot search bounds: how many periods to check in each direction
-  const LATTICE_LN_COPIES = 6;   // ±6 radial periods
-  const LATTICE_THETA_COPIES = 3; // ±3 angular periods
+  const LATTICE_LN_COPIES = 6;
+  const LATTICE_THETA_COPIES = 3;
 
-  // Coordinate conversions
   function uvToSourcePx(u, v) {
     return { x: u * sourceCanvas.width, y: (1 - v) * sourceCanvas.height };
   }
@@ -668,8 +552,6 @@ function main() {
   }
 
   function uvToDrostePx(u, v) {
-    // Shader: pos = (frag/res - viewCenter) * viewScale + 0.5
-    // Invert: frag/res = (uv - 0.5) / viewScale + viewCenter
     const normX = (u - 0.5) / viewScale + viewCenter.x;
     const normY = (v - 0.5) / viewScale + viewCenter.y;
     return { x: normX * overDroste.width, y: (1 - normY) * overDroste.height };
@@ -702,7 +584,6 @@ function main() {
     }
   }
 
-  // Draw a circle at constant r in source space (maps to vertical line in log space)
   function drawCircleInSource(ctx, r, color, lineWidth) {
     const cx = polarOrigin.x * sourceCanvas.width;
     const cy = (1 - polarOrigin.y) * sourceCanvas.height;
@@ -714,7 +595,6 @@ function main() {
     ctx.stroke();
   }
 
-  // Draw a radial line at constant theta in source space (maps to horizontal line in log space)
   function drawRadialInSource(ctx, theta, rMin, rMax, color, lineWidth) {
     const cx = polarOrigin.x;
     const cy = polarOrigin.y;
@@ -728,7 +608,6 @@ function main() {
     ctx.stroke();
   }
 
-  // Draw a spiral in source space (maps to a tilted line in log space)
   function drawSpiralInSource(ctx, lnrStart, thetaStart, slope, color, lineWidth) {
     ctx.strokeStyle = color;
     ctx.lineWidth = lineWidth;
@@ -749,34 +628,27 @@ function main() {
     ctx.stroke();
   }
 
-  // Draw overlays for all four panels based on a hover point in ζ-space (lnr, theta)
   function drawHoverGuides(lnr, theta) {
     syncOverlays();
     clearOverlays();
     const r = Math.exp(lnr);
 
-    // Panel 1: circle at constant r, radial at constant θ, and crosshair dot
+    // Panel 1
     const srcCtx2 = overSource.getContext("2d");
     drawCircleInSource(srcCtx2, r, "rgba(0, 200, 255, 0.6)", 1.5);
     drawRadialInSource(srcCtx2, theta, 0, 1.5, "rgba(255, 100, 200, 0.6)", 1.5);
-    // Dot at the hover point
     const hp = uvToSourcePx(polarOrigin.x + r * Math.cos(theta), polarOrigin.y + r * Math.sin(theta));
     srcCtx2.fillStyle = "rgba(255, 255, 0, 0.9)";
     srcCtx2.beginPath();
     srcCtx2.arc(hp.x, hp.y, 4, 0, TAU);
     srcCtx2.fill();
-
-    // Also draw the α·Δζ lattice spiral through this point
-    // The spiral where ζ' = const along the α direction
     if (Math.abs(alphaLog.im) > 0.01 || Math.abs(alphaLog.re - 1) > 0.01) {
-      // Slope in ζ-space: dln(r)/dθ = α_re/α_im (direction perpendicular to α)
       const slope = alphaLog.re / (alphaLog.im || 1e-10);
       drawSpiralInSource(srcCtx2, lnr, theta, slope, "rgba(100, 255, 100, 0.4)", 1.5);
     }
 
-    // Panel 2: vertical line at constant ln(r), horizontal at constant θ
+    // Panel 2
     const logCtx = overLog.getContext("2d");
-    // Vertical line (constant ln r → circle in source)
     const vx = zetaToLogPx(lnr, 0);
     logCtx.strokeStyle = "rgba(0, 200, 255, 0.6)";
     logCtx.lineWidth = 1.5;
@@ -784,21 +656,17 @@ function main() {
     logCtx.moveTo(vx.x, 0);
     logCtx.lineTo(vx.x, logCanvas.height);
     logCtx.stroke();
-    // Horizontal line (constant θ → radial in source)
     const hy = zetaToLogPx(0, theta);
     logCtx.strokeStyle = "rgba(255, 100, 200, 0.6)";
     logCtx.beginPath();
     logCtx.moveTo(0, hy.y);
     logCtx.lineTo(logCanvas.width, hy.y);
     logCtx.stroke();
-    // Dot
     const lp = zetaToLogPx(lnr, theta);
     logCtx.fillStyle = "rgba(255, 255, 0, 0.9)";
     logCtx.beginPath();
     logCtx.arc(lp.x, lp.y, 4, 0, TAU);
     logCtx.fill();
-
-    // Lattice dots in panel 2: periodic copies of the hovered point
     logCtx.fillStyle = "rgba(255, 255, 0, 0.4)";
     for (let di = -LATTICE_LN_COPIES; di <= LATTICE_LN_COPIES; di++) {
       for (let dj = -LATTICE_THETA_COPIES; dj <= LATTICE_THETA_COPIES; dj++) {
@@ -814,10 +682,9 @@ function main() {
       }
     }
 
-    // Panel 3: transform through α → ζ' = α·ζ
+    // Panel 3
     const zp = cmul_js(alphaLog, { re: lnr, im: theta });
     const alCtx = overAligned.getContext("2d");
-    // Vertical line in ζ' at constant ζ'.re (= α·ζ constant-real line → spiral in source)
     const av = zetaPrimeToAlignedPx(zp.re, 0);
     alCtx.strokeStyle = "rgba(100, 255, 100, 0.6)";
     alCtx.lineWidth = 1.5;
@@ -825,21 +692,17 @@ function main() {
     alCtx.moveTo(av.x, 0);
     alCtx.lineTo(av.x, logAlignedCanvas.height);
     alCtx.stroke();
-    // Horizontal line in ζ' at constant ζ'.im
     const ah = zetaPrimeToAlignedPx(0, zp.im);
     alCtx.strokeStyle = "rgba(255, 180, 50, 0.6)";
     alCtx.beginPath();
     alCtx.moveTo(0, ah.y);
     alCtx.lineTo(logAlignedCanvas.width, ah.y);
     alCtx.stroke();
-    // Dot
     const ap = zetaPrimeToAlignedPx(zp.re, zp.im);
     alCtx.fillStyle = "rgba(255, 255, 0, 0.9)";
     alCtx.beginPath();
     alCtx.arc(ap.x, ap.y, 4, 0, TAU);
     alCtx.fill();
-
-    // Lattice dots in panel 3: periodic copies mapped through α
     alCtx.fillStyle = "rgba(255, 255, 0, 0.4)";
     for (let di = -LATTICE_LN_COPIES; di <= LATTICE_LN_COPIES; di++) {
       for (let dj = -LATTICE_THETA_COPIES; dj <= LATTICE_THETA_COPIES; dj++) {
@@ -856,13 +719,11 @@ function main() {
       }
     }
 
-    // Panel 4 (Droste): the point maps to Cartesian via exp of ζ'
+    // Panel 4
     const drCtx = overDroste.getContext("2d");
     const rDroste = Math.exp(zp.re);
     const thetaDroste = zp.im;
 
-    // Circle at constant r (= constant ζ'.re → vertical in panel 3)
-    // Draw as a polyline to handle non-uniform scaling correctly
     const dCenter = uvToDrostePx(polarOrigin.x, polarOrigin.y);
     drCtx.strokeStyle = "rgba(100, 255, 100, 0.6)";
     drCtx.lineWidth = 4;
@@ -879,7 +740,6 @@ function main() {
     }
     drCtx.stroke();
 
-    // Radial line at constant θ (= constant ζ'.im → horizontal in panel 3)
     const rFar = 2.0;
     const dp1 = uvToDrostePx(polarOrigin.x, polarOrigin.y);
     const dp2 = uvToDrostePx(
@@ -893,7 +753,6 @@ function main() {
     drCtx.lineTo(dp2.x, dp2.y);
     drCtx.stroke();
 
-    // Dot
     const ddp = uvToDrostePx(
       polarOrigin.x + rDroste * Math.cos(thetaDroste),
       polarOrigin.y + rDroste * Math.sin(thetaDroste)
@@ -904,7 +763,6 @@ function main() {
     drCtx.fill();
   }
 
-  // Convert mouse position on a panel to ζ-space
   function sourceCanvasToZeta(e) {
     const rect = sourceCanvas.getBoundingClientRect();
     const u = (e.clientX - rect.left) / rect.width;
@@ -931,7 +789,6 @@ function main() {
     const ny = 1 - (e.clientY - rect.top) / rect.height;
     const zpRe = zetaA.re + nx * zetaEdgeU.re;
     const zpIm = zetaA.im + ny * zetaEdgeV.im;
-    // ζ = ζ'/α
     const zeta = cdiv_js({ re: zpRe, im: zpIm }, alphaLog);
     return { lnr: zeta.re, theta: zeta.im };
   }
@@ -940,8 +797,6 @@ function main() {
     const rect = canvas.getBoundingClientRect();
     const sx = (e.clientX - rect.left) / rect.width;
     const sy = (e.clientY - rect.top) / rect.height;
-    // Screen to normalized: posX = sx, posY = 1 - sy
-    // Shader: uv = (pos - viewCenter) * viewScale + 0.5
     const u = (sx - viewCenter.x) * viewScale + 0.5;
     const v = (1 - sy - viewCenter.y) * viewScale + 0.5;
     const dx = u - polarOrigin.x;
@@ -949,7 +804,6 @@ function main() {
     const r = Math.hypot(dx, dy);
     if (r < 1e-10) return null;
     const thetaD = Math.atan2(dy, dx);
-    // ζ' = (ln r, θ), then ζ = ζ'/α
     const zeta = cdiv_js({ re: Math.log(r), im: thetaD }, alphaLog);
     return { lnr: zeta.re, theta: zeta.im };
   }
