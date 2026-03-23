@@ -250,33 +250,6 @@ function main() {
     draw();
   });
 
-  // --- Animation ---
-  let animating = false;
-  let animRAF = null;
-  const animBtn = document.getElementById("btnAnimate");
-
-  function animationLoop(t) {
-    if (!animating) return;
-    let angle = parseFloat(angleSlider.value) + 0.005;
-    angle = angle - 2 * Math.PI * Math.floor((angle + Math.PI) / (2 * Math.PI));
-    angleSlider.value = angle;
-    updateAlpha();
-    draw();
-    animRAF = requestAnimationFrame(animationLoop);
-  }
-
-  animBtn.addEventListener("click", () => {
-    animating = !animating;
-    animBtn.classList.toggle("active", animating);
-    animBtn.textContent = animating ? "Stop" : "Animate";
-    if (animating) {
-      animRAF = requestAnimationFrame(animationLoop);
-    } else {
-      if (animRAF) cancelAnimationFrame(animRAF);
-      saveHash();
-    }
-  });
-
   // --- Central hole toggle ---
   let showHole = true;
   const holeBtn = document.getElementById("btnHole");
@@ -486,6 +459,7 @@ function main() {
     last.y = e.clientY;
     viewCenter.x -= dx * viewScale;
     viewCenter.y -= dy * viewScale;
+    clearOverlays();
     draw();
   });
 
@@ -495,6 +469,7 @@ function main() {
       e.preventDefault();
       const factor = e.deltaY > 0 ? 1.08 : 1 / 1.08;
       viewScale = Math.min(8, Math.max(0.35, viewScale * factor));
+      clearOverlays();
       draw();
     },
     { passive: false }
@@ -635,37 +610,64 @@ function main() {
 
     // Panel 1
     const srcCtx2 = overSource.getContext("2d");
-    drawCircleInSource(srcCtx2, r, "rgba(0, 200, 255, 0.6)", 1.5);
-    drawRadialInSource(srcCtx2, theta, 0, 1.5, "rgba(255, 100, 200, 0.6)", 1.5);
+    drawCircleInSource(srcCtx2, r, "rgba(0, 200, 255, 0.6)", 3);
+    drawRadialInSource(srcCtx2, theta, 0, 1.5, "rgba(255, 100, 200, 0.6)", 3);
     const hp = uvToSourcePx(polarOrigin.x + r * Math.cos(theta), polarOrigin.y + r * Math.sin(theta));
     srcCtx2.fillStyle = "rgba(255, 255, 0, 0.9)";
     srcCtx2.beginPath();
-    srcCtx2.arc(hp.x, hp.y, 4, 0, TAU);
+    srcCtx2.arc(hp.x, hp.y, 7, 0, TAU);
     srcCtx2.fill();
     if (Math.abs(alphaLog.im) > 0.01 || Math.abs(alphaLog.re - 1) > 0.01) {
-      const slope = alphaLog.re / (alphaLog.im || 1e-10);
-      drawSpiralInSource(srcCtx2, lnr, theta, slope, "rgba(100, 255, 100, 0.4)", 1.5);
+      const slopeGreen = alphaLog.im / (alphaLog.re || 1e-10);
+      drawSpiralInSource(srcCtx2, lnr, theta, slopeGreen, "rgba(100, 255, 100, 0.6)", 3);
+      const slopeOrange = -alphaLog.re / (alphaLog.im || 1e-10);
+      drawSpiralInSource(srcCtx2, lnr, theta, slopeOrange, "rgba(255, 180, 50, 0.6)", 3);
     }
 
     // Panel 2
     const logCtx = overLog.getContext("2d");
     const vx = zetaToLogPx(lnr, 0);
     logCtx.strokeStyle = "rgba(0, 200, 255, 0.6)";
-    logCtx.lineWidth = 1.5;
+    logCtx.lineWidth = 3;
     logCtx.beginPath();
     logCtx.moveTo(vx.x, 0);
     logCtx.lineTo(vx.x, logCanvas.height);
     logCtx.stroke();
     const hy = zetaToLogPx(0, theta);
     logCtx.strokeStyle = "rgba(255, 100, 200, 0.6)";
+    logCtx.lineWidth = 3;
     logCtx.beginPath();
     logCtx.moveTo(0, hy.y);
     logCtx.lineTo(logCanvas.width, hy.y);
     logCtx.stroke();
+    if (Math.abs(alphaLog.im) > 0.01 || Math.abs(alphaLog.re - 1) > 0.01) {
+      const slopeGreen = alphaLog.im / (alphaLog.re || 1e-10);
+      const thetaAtL0 = theta + (L0 - lnr) / slopeGreen;
+      const thetaAtL1 = theta + (L1 - lnr) / slopeGreen;
+      const gp0 = zetaToLogPx(L0, thetaAtL0);
+      const gp1 = zetaToLogPx(L1, thetaAtL1);
+      logCtx.strokeStyle = "rgba(100, 255, 100, 0.6)";
+      logCtx.lineWidth = 3;
+      logCtx.beginPath();
+      logCtx.moveTo(gp0.x, gp0.y);
+      logCtx.lineTo(gp1.x, gp1.y);
+      logCtx.stroke();
+      const slopeOrange = -alphaLog.re / (alphaLog.im || 1e-10);
+      const thetaAtL0o = theta + (L0 - lnr) / slopeOrange;
+      const thetaAtL1o = theta + (L1 - lnr) / slopeOrange;
+      const op0 = zetaToLogPx(L0, thetaAtL0o);
+      const op1 = zetaToLogPx(L1, thetaAtL1o);
+      logCtx.strokeStyle = "rgba(255, 180, 50, 0.6)";
+      logCtx.lineWidth = 3;
+      logCtx.beginPath();
+      logCtx.moveTo(op0.x, op0.y);
+      logCtx.lineTo(op1.x, op1.y);
+      logCtx.stroke();
+    }
     const lp = zetaToLogPx(lnr, theta);
     logCtx.fillStyle = "rgba(255, 255, 0, 0.9)";
     logCtx.beginPath();
-    logCtx.arc(lp.x, lp.y, 4, 0, TAU);
+    logCtx.arc(lp.x, lp.y, 7, 0, TAU);
     logCtx.fill();
     logCtx.fillStyle = "rgba(255, 255, 0, 0.4)";
     for (let di = -LATTICE_LN_COPIES; di <= LATTICE_LN_COPIES; di++) {
@@ -677,7 +679,7 @@ function main() {
         if (ltp.x < -5 || ltp.x > logCanvas.width + 5 ||
             ltp.y < -5 || ltp.y > logCanvas.height + 5) continue;
         logCtx.beginPath();
-        logCtx.arc(ltp.x, ltp.y, 3, 0, TAU);
+        logCtx.arc(ltp.x, ltp.y, 5, 0, TAU);
         logCtx.fill();
       }
     }
@@ -685,15 +687,38 @@ function main() {
     // Panel 3
     const zp = cmul_js(alphaLog, { re: lnr, im: theta });
     const alCtx = overAligned.getContext("2d");
+    // Cyan tilted line: constant lnr → ζ' = α·(lnr + iθ) as θ varies
+    const zpThetaLo = cmul_js(alphaLog, { re: lnr, im: thetaMin - TAU });
+    const zpThetaHi = cmul_js(alphaLog, { re: lnr, im: thetaMax + TAU });
+    const ctA0 = zetaPrimeToAlignedPx(zpThetaLo.re, zpThetaLo.im);
+    const ctA1 = zetaPrimeToAlignedPx(zpThetaHi.re, zpThetaHi.im);
+    alCtx.strokeStyle = "rgba(0, 200, 255, 0.6)";
+    alCtx.lineWidth = 3;
+    alCtx.beginPath();
+    alCtx.moveTo(ctA0.x, ctA0.y);
+    alCtx.lineTo(ctA1.x, ctA1.y);
+    alCtx.stroke();
+    // Pink tilted line: constant θ → ζ' = α·(lnr + iθ₀) as lnr varies
+    const zpLnLo = cmul_js(alphaLog, { re: L0, im: theta });
+    const zpLnHi = cmul_js(alphaLog, { re: L1, im: theta });
+    const ptA0 = zetaPrimeToAlignedPx(zpLnLo.re, zpLnLo.im);
+    const ptA1 = zetaPrimeToAlignedPx(zpLnHi.re, zpLnHi.im);
+    alCtx.strokeStyle = "rgba(255, 100, 200, 0.6)";
+    alCtx.lineWidth = 3;
+    alCtx.beginPath();
+    alCtx.moveTo(ptA0.x, ptA0.y);
+    alCtx.lineTo(ptA1.x, ptA1.y);
+    alCtx.stroke();
     const av = zetaPrimeToAlignedPx(zp.re, 0);
     alCtx.strokeStyle = "rgba(100, 255, 100, 0.6)";
-    alCtx.lineWidth = 1.5;
+    alCtx.lineWidth = 3;
     alCtx.beginPath();
     alCtx.moveTo(av.x, 0);
     alCtx.lineTo(av.x, logAlignedCanvas.height);
     alCtx.stroke();
     const ah = zetaPrimeToAlignedPx(0, zp.im);
     alCtx.strokeStyle = "rgba(255, 180, 50, 0.6)";
+    alCtx.lineWidth = 3;
     alCtx.beginPath();
     alCtx.moveTo(0, ah.y);
     alCtx.lineTo(logAlignedCanvas.width, ah.y);
@@ -701,7 +726,7 @@ function main() {
     const ap = zetaPrimeToAlignedPx(zp.re, zp.im);
     alCtx.fillStyle = "rgba(255, 255, 0, 0.9)";
     alCtx.beginPath();
-    alCtx.arc(ap.x, ap.y, 4, 0, TAU);
+    alCtx.arc(ap.x, ap.y, 7, 0, TAU);
     alCtx.fill();
     alCtx.fillStyle = "rgba(255, 255, 0, 0.4)";
     for (let di = -LATTICE_LN_COPIES; di <= LATTICE_LN_COPIES; di++) {
@@ -714,7 +739,7 @@ function main() {
         if (ltp.x < -5 || ltp.x > logAlignedCanvas.width + 5 ||
             ltp.y < -5 || ltp.y > logAlignedCanvas.height + 5) continue;
         alCtx.beginPath();
-        alCtx.arc(ltp.x, ltp.y, 3, 0, TAU);
+        alCtx.arc(ltp.x, ltp.y, 5, 0, TAU);
         alCtx.fill();
       }
     }
@@ -724,7 +749,43 @@ function main() {
     const rDroste = Math.exp(zp.re);
     const thetaDroste = zp.im;
 
-    const dCenter = uvToDrostePx(polarOrigin.x, polarOrigin.y);
+    // Cyan log-spiral: constant lnr → ζ' = α·(lnr + iθ), exp gives r=exp(Re), θ=Im
+    const spiralSteps = 300;
+    const spiralThetaRange = TAU * 3;
+    drCtx.strokeStyle = "rgba(0, 200, 255, 0.6)";
+    drCtx.lineWidth = 3;
+    drCtx.beginPath();
+    for (let i = 0; i <= spiralSteps; i++) {
+      const t = -spiralThetaRange / 2 + (spiralThetaRange * i) / spiralSteps;
+      const zpS = cmul_js(alphaLog, { re: lnr, im: theta + t });
+      const rS = Math.exp(zpS.re);
+      const sp = uvToDrostePx(
+        polarOrigin.x + rS * Math.cos(zpS.im),
+        polarOrigin.y + rS * Math.sin(zpS.im)
+      );
+      if (i === 0) drCtx.moveTo(sp.x, sp.y);
+      else drCtx.lineTo(sp.x, sp.y);
+    }
+    drCtx.stroke();
+
+    // Pink log-spiral: constant θ → ζ' = α·(lnr + iθ₀), exp gives r=exp(Re), θ=Im
+    drCtx.strokeStyle = "rgba(255, 100, 200, 0.6)";
+    drCtx.lineWidth = 3;
+    drCtx.beginPath();
+    for (let i = 0; i <= spiralSteps; i++) {
+      const t = L0 + (L1 - L0) * i / spiralSteps;
+      const zpS = cmul_js(alphaLog, { re: t, im: theta });
+      const rS = Math.exp(zpS.re);
+      const sp = uvToDrostePx(
+        polarOrigin.x + rS * Math.cos(zpS.im),
+        polarOrigin.y + rS * Math.sin(zpS.im)
+      );
+      if (i === 0) drCtx.moveTo(sp.x, sp.y);
+      else drCtx.lineTo(sp.x, sp.y);
+    }
+    drCtx.stroke();
+
+    // Green circle: constant Re(ζ') → constant r in Droste space
     drCtx.strokeStyle = "rgba(100, 255, 100, 0.6)";
     drCtx.lineWidth = 4;
     drCtx.beginPath();
@@ -740,6 +801,7 @@ function main() {
     }
     drCtx.stroke();
 
+    // Orange radial: constant Im(ζ') → constant θ in Droste space
     const rFar = 2.0;
     const dp1 = uvToDrostePx(polarOrigin.x, polarOrigin.y);
     const dp2 = uvToDrostePx(
