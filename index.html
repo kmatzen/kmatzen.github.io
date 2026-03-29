@@ -33,7 +33,10 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="preload" as="image" href="images/daytime.webp" type="image/webp">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
   
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -250,7 +253,7 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
 
-    h3 {
+    h2 {
       font-weight: 700;
       color: var(--text-primary);
       margin-top: 1.5rem;
@@ -939,8 +942,14 @@
     <div class="row profile-section">
       <div class="col-md-4">
         <div class="profile-img-container">
-          <img src="images/daytime.jpg" class="profile-img" id="profileImgBottom" alt="Kevin Blackburn-Matzen" />
-          <img src="images/daytime.jpg" class="profile-img" id="profileImgTop" alt="Kevin Blackburn-Matzen" />
+          <picture>
+            <source srcset="images/daytime.webp" type="image/webp">
+            <img src="images/daytime.jpg" class="profile-img" id="profileImgBottom" alt="Kevin Blackburn-Matzen" width="280" height="384" fetchpriority="high" />
+          </picture>
+          <picture>
+            <source srcset="images/daytime.webp" type="image/webp">
+            <img src="images/daytime.jpg" class="profile-img" id="profileImgTop" alt="Kevin Blackburn-Matzen" width="280" height="384" fetchpriority="high" />
+          </picture>
         </div>
       </div>
       <div class="col-md-8 bio-text">
@@ -985,7 +994,7 @@
     <!-- News & Updates -->
     <div class="row">
       <div class="col-md-12">
-        <h3>News</h3>
+        <h2>News</h2>
         <ul class="news-list">
           <li><span class="news-date">Feb 2026</span> <a href="https://oindrilasaha.github.io/3DScratchpad/">3D Space as a Scratchpad</a> accepted to <strong>CVPR 2026</strong></li>
           <li><span class="news-date">Jan 2026</span> <a href="https://oindrilasaha.github.io/sigma-gen/">SIGMA-Gen</a> accepted to <strong>ICLR 2026</strong></li>
@@ -997,7 +1006,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h3>Publications</h3>
+        <h2>Publications</h2>
 
         <div class="filter-container">
           <div class="filter-buttons" id="filterButtons" role="group" aria-label="Filter publications by category">
@@ -1016,12 +1025,12 @@
         <div class="publications-grid" id="publicationsGrid">
           <div class="card" data-tags="3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://rioak.github.io/seeingthroughclutter/"
                   target="_blank">
                   <strong>Seeing Through Clutter: Structured 3D Scene Reconstruction via Iterative Object Removal</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://rioak.github.io/">R Aguina-Kang</a>, <b>K Blackburn-Matzen</b>, <a href="https://imagine.enpc.fr/~groueixt/">T Groueix</a>, <a href="https://vovakim.com/">V Kim</a>, <a href="http://mgadelha.me/">M Gadelha</a></div>
               <div class="card-text"><em>3DV 2026</em></div>
               <div class="publication-tags">
@@ -1038,12 +1047,12 @@
 
           <div class="card" data-tags="generative-ai,3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://oindrilasaha.github.io/3DScratchpad/"
                   target="_blank">
                   <strong>3D Space as a Scratchpad for Editable Text-to-Image Generation</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://oindrilasaha.github.io/">O. Saha</a>, <a href="https://research.adobe.com/person/vojtech-krs/">V. Krs</a>, <a href="https://research.adobe.com/person/radomir-mech/">R. Mech</a>, <a href="https://people.cs.umass.edu/~smaji/">S. Maji</a>, <a href="http://mgadelha.me/">M. Gadelha</a>, <b>K Blackburn-Matzen</b></div>
               <div class="card-text"><em>CVPR 2026</em></div>
               <div class="publication-tags">
@@ -1061,12 +1070,12 @@
 
           <div class="card" data-tags="generative-ai">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://oindrilasaha.github.io/SIGMA-Gen/"
                   target="_blank">
                   <strong>SIGMA-GEN: Structure and Identity Guided Multi-subject Assembly for Image Generation</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://oindrilasaha.github.io/">O. Saha</a>, <a href="https://research.adobe.com/person/vojtech-krs/">V. Krs</a>, <a href="https://research.adobe.com/person/radomir-mech/">R. Mech</a>, <a href="https://people.cs.umass.edu/~smaji/">S. Maji</a>, <b>K Blackburn-Matzen</b>, <a href="http://mgadelha.me/">M. Gadelha</a></div>
               <div class="card-text"><em>ICLR 2026</em></div>
               <div class="publication-tags">
@@ -1083,12 +1092,12 @@
 
           <div class="card" data-tags="computational-photography">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://erickee.com/reflections/cvpr2025.html"
                   target="_blank">
                   <strong>Removing Reflections from RAW Photos</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://erickee.com/">E Kee</a>, <a href="https://www.linkedin.com/in/adam-pikielny-30a606152/">A Pikielny</a>, <b>K Blackburn‑Matzen</b>, <a href="https://graphics.stanford.edu/~levoy/">M Levoy</a></div>
               <div class="card-text"><em>CVPR 2025</em></div>
               <div class="publication-tags">
@@ -1103,11 +1112,11 @@
 
           <div class="card" data-tags="video,3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://casual-fvs.github.io/" target="_blank">
                   <strong>Fast View Synthesis of Casual Videos with Soup-of-Planes</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://yaochih.github.io/">YC Lee</a>, <a href="http://ztzhang.info/">Z Zhang</a>, <b>K Blackburn-Matzen</b>, <a href="https://sniklaus.com/">S Niklaus</a>, <a href="https://jimmie33.github.io/">J Zhang</a>, <a href="https://jbhuang0604.github.io/">JB Huang</a>, <a href="https://pages.cs.wisc.edu/~fliu/">F Liu</a></div>
               <div class="card-text"><em>ECCV 2024</em></div>
               <div class="publication-tags">
@@ -1122,11 +1131,11 @@
 
           <div class="card" data-tags="video,3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://em-yu.github.io/research/videodoodles/" target="_blank">
                   <strong>VideoDoodles: Hand-Drawn Animations on Videos with Scene-Aware Canvases</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://em-yu.github.io/">E Yu</a>, <b>K Blackburn-Matzen</b>, <a href="https://cuongnd.com/">C Nguyen</a>, <a href="https://www.oliverwang.info/">O Wang</a>, <a href="https://rubaiathabib.me/">RH Kazi</a>, <a href="https://www-sop.inria.fr/members/Adrien.Bousseau/">A Bousseau</a></div>
               <div class="card-text"><em>SIGGRAPH 2023</em></div>
               <div class="publication-tags">
@@ -1141,11 +1150,11 @@
 
           <div class="card" data-tags="3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://jinlinyi.github.io/PerspectiveFields/" target="_blank">
                   <strong>Perspective Fields for Single Image Camera Calibration</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://jinlinyi.github.io/">L Jin</a>, <a href="https://jimmie33.github.io/">J Zhang</a>, <a href="https://yannickhold.com/">Y Hold-Geoffroy</a>, <a href="https://www.oliverwang.info/">O Wang</a>, <b>K Matzen</b>, <a href="https://www.linkedin.com/in/matthew-sticha-746325202/">M Sticha</a>, <a href="https://fouheylab.eecs.umich.edu/">DF Fouhey</a></div>
               <div class="card-text"><em>CVPR 2023</em></div>
               <div class="publication-tags">
@@ -1160,11 +1169,11 @@
 
           <div class="card" data-tags="depth,3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://arxiv.org/abs/2211.10551" target="_blank">
                   <strong>A Practical Stereo Depth System for Smart Glasses</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://sites.google.com/view/jialiangwang/">J Wang</a>, <a href="https://www.cs.middlebury.edu/~schar/">D Scharstein</a>, <a href="https://akashbapat.github.io/">A Bapat</a>, <b>K Blackburn-Matzen</b>, <a href="https://www.linkedin.com/in/mattcyu/">M Yu</a>, <a href="https://www.linkedin.com/in/jonathan-lehman-40907b2b/">J Lehman</a>, <a href="https://www.linkedin.com/in/salsisan/">S Alsisan</a>, <a href="https://www.linkedin.com/in/yanghan-wang-7b5a21105/">Y Wang</a>, <a href="https://scholar.google.com/citations?user=JdE_LFYAAAAJ">S Tsai</a>, <a href="https://cs.unc.edu/person/jan-michael-frahm/">JM Frahm</a>, <a href="https://scholar.google.com/citations?user=G03EzSMAAAAJ">Z He</a>, <a href="https://sites.google.com/site/vajdap">P Vajda</a>, <a href="https://scholar.google.com/citations?user=YAtwLpwAAAAJ">MF Cohen</a>, <a href="https://scholar.google.com/citations?user=7kxzvksAAAAJ">M Uyttendaele</a></div>
               <div class="card-text"><em>CVPR 2023</em></div>
               <div class="publication-tags">
@@ -1180,11 +1189,11 @@
 
           <div class="card" data-tags="3d-vision,computational-photography,depth">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://facebookresearch.github.io/one_shot_3d_photography/" target="_blank">
                   <strong>One Shot 3D Photography</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://johanneskopf.de/">J Kopf</a>, <b>K Matzen</b>, <a href="https://www.linkedin.com/in/salsisan/">S Alsisan</a>, <a href="https://www.linkedin.com/in/ocean-quigley-4a84b4112/">O Quigley</a>, <a href="https://www.linkedin.com/in/francisge/">F Ge</a>, <a href="https://scholar.google.com/citations?user=QDkHSzIAAAAJ">Y Chong</a>, <a href="https://www.linkedin.com/in/joshua-patterson-6348a023/">J Patterson</a>, <a href="https://cs.unc.edu/person/jan-michael-frahm/">JM Frahm</a>, <a href="https://www.linkedin.com/in/shuvv/">S Wu</a>, <a href="https://www.linkedin.com/in/mattcyu/">M Yu</a>, <a href="https://scholar.google.com/citations?user=eqQQkM4AAAAJ">P Zhang</a>, <a href="https://scholar.google.com/citations?user=G03EzSMAAAAJ">Z He</a>, <a href="https://sites.google.com/site/vajdap">P Vajda</a>, <a href="https://www.ayushsaraf.com/">A Saraf</a>, <a href="https://scholar.google.com/citations?user=YAtwLpwAAAAJ">M Cohen</a></div>
               <div class="card-text"><em>SIGGRAPH 2020</em></div>
               <div class="publication-tags">
@@ -1201,11 +1210,11 @@
 
           <div class="card" data-tags="depth,video,3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://roxanneluo.github.io/Consistent-Video-Depth-Estimation/" target="_blank">
                   <strong>Consistent Video Depth Estimation</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://roxanneluo.github.io/">X Luo</a>, <a href="https://jbhuang0604.github.io/">JB Huang</a>, <a href="https://szeliski.org/">R Szeliski</a>, <b>K Matzen</b>, <a href="https://johanneskopf.de/">J Kopf</a></div>
               <div class="card-text"><em>SIGGRAPH 2020</em></div>
               <div class="publication-tags">
@@ -1222,11 +1231,11 @@
 
           <div class="card" data-tags="3d-vision,depth">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://ieeexplore.ieee.org/document/9156343" target="_blank">
                   <strong>VPLNet: Deep Single View Normal Estimation With Vanishing Points and Lines</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text">R Wang, <a href="https://www.linkedin.com/in/david-g-56088914a/">D Geraghty</a>, <b>K Matzen</b>, <a href="https://szeliski.org/">R Szeliski</a>, <a href="https://cs.unc.edu/person/jan-michael-frahm/">JM Frahm</a></div>
               <div class="card-text"><em>CVPR 2020</em></div>
               <div class="publication-tags">
@@ -1241,11 +1250,11 @@
 
           <div class="card" data-tags="trend-analysis,detection">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://geostyle.cs.cornell.edu/" target="_blank">
                   <strong>GeoStyle: Discovering Fashion Trends and Events</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://utkarshmall.com/">U Mall</a>, <b>K Matzen</b>, <a href="https://www.cs.cornell.edu/~bharathh/">B Hariharan</a>, <a href="https://www.cs.cornell.edu/~kb/">K Bala</a>, <a href="https://www.cs.cornell.edu/~snavely/">N Snavely</a></div>
               <div class="card-text"><em>ICCV 2019</em></div>
               <div class="publication-tags">
@@ -1263,11 +1272,11 @@
 
           <div class="card" data-tags="video,computational-photography,depth">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://ceciliavision.github.io/vid-auto-focus/" target="_blank">
                   <strong>Synthetic Defocus and Look-Ahead Autofocus for Casual Videography</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://ceciliavision.github.io/">X Zhang</a>, <b>K Matzen</b>, <a href="https://viviehn.github.io/">V Nguyen</a>, <a href="https://www.linkedin.com/in/dillon-yao-b24329102/">D Yao</a>, Y Zhang, <a href="https://www2.eecs.berkeley.edu/Faculty/Homepages/yirenng.html">R Ng</a></div>
               <div class="card-text"><em>SIGGRAPH 2019</em></div>
               <div class="publication-tags">
@@ -1284,12 +1293,12 @@
 
           <div class="card" data-tags="computational-photography">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://openaccess.thecvf.com/content_ECCV_2018/papers/Clement_Godard_Deep_Burst_Denoising_ECCV_2018_paper.pdf"
                   target="_blank">
                   <strong>Deep Burst Denoising</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://scholar.google.co.uk/citations?user=Uz9h6LEAAAAJ">C Godard</a>, <b>K Matzen</b>, <a href="https://scholar.google.com/citations?user=7kxzvksAAAAJ">M Uyttendaele</a></div>
               <div class="card-text"><em>ECCV 2018</em></div>
               <div class="publication-tags">
@@ -1306,11 +1315,11 @@
 
           <div class="card" data-tags="3d-vision,depth">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://phuang17.github.io/DeepMVS/index.html" target="_blank">
                   <strong>DeepMVS: Learning Multi-view Stereopsis</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://phuang17.github.io/">PH Huang</a>, <b>K Matzen</b>, <a href="https://johanneskopf.de/">J Kopf</a>, <a href="https://vision.ai.illinois.edu/narendra-ahuja/">N Ahuja</a>, <a href="https://jbhuang0604.github.io/">JB Huang</a></div>
               <div class="card-text"><em>CVPR 2018</em></div>
               <div class="publication-tags">
@@ -1325,11 +1334,11 @@
 
           <div class="card" data-tags="3d-vision,computational-photography">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="https://dl.acm.org/doi/10.1145/3072959.3073645" target="_blank">
                   <strong>Low-cost 360 stereo photography and video capture</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><b>K Matzen</b>, <a href="https://scholar.google.com/citations?user=YAtwLpwAAAAJ">MF Cohen</a>, <a href="https://www.linkedin.com/in/bryce-e/">B Evans</a>, <a href="https://johanneskopf.de/">J Kopf</a>, <a href="https://szeliski.org/">R Szeliski</a></div>
               <div class="card-text"><em>SIGGRAPH 2017</em></div>
               <div class="publication-tags">
@@ -1347,11 +1356,11 @@
 
           <div class="card" data-tags="trend-analysis,detection">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="http://streetstyle.cs.cornell.edu/" target="_blank">
                   <strong>StreetStyle: Exploring world-wide clothing styles from millions of photos</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><b>K Matzen</b>, <a href="https://www.cs.cornell.edu/~kb/">K Bala</a>, <a href="https://www.cs.cornell.edu/~snavely/">N Snavely</a></div>
               <div class="card-text"><em>arXiv preprint 2017</em></div>
               <div class="publication-tags">
@@ -1369,12 +1378,12 @@
 
           <div class="card" data-tags="detection,robotics">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="http://arxiv.org/abs/1605.02196" target="_blank">
                   <strong>All Weather Perception: Joint Data Association, Tracking, and Classification for Autonomous
                     Ground Vehicles</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><a href="https://www.linkedin.com/in/peter-radecki-29281315/">P Radecki</a>, <a href="https://campbell.mae.cornell.edu/">M Campbell</a>, <b>K Matzen</b></div>
               <div class="card-text"><em>arXiv preprint 2016</em></div>
               <div class="publication-tags">
@@ -1392,11 +1401,11 @@
 
           <div class="card" data-tags="detection">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="http://www.cs.cornell.edu/projects/bubblenet/" target="_blank">
                   <strong>BubbLeNet: Foveated Imaging for Visual Discovery</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><b>K Matzen</b>, <a href="https://www.cs.cornell.edu/~snavely/">N Snavely</a></div>
               <div class="card-text"><em>ICCV 2015</em></div>
               <div class="publication-tags">
@@ -1413,12 +1422,12 @@
 
           <div class="card" data-tags="trend-analysis,3d-vision">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="http://www.cs.cornell.edu/projects/chronology/" target="_blank">
                   <strong>Scene Chronology</strong>
                 </a>
                 <span class="award-badge">🏆 Best Paper</span>
-              </h5>
+              </h3>
               <div class="card-text"><b>K Matzen</b>, <a href="https://www.cs.cornell.edu/~snavely/">N Snavely</a></div>
               <div class="card-text"><em>ECCV 2014</em></div>
               <div class="publication-tags">
@@ -1433,11 +1442,11 @@
 
           <div class="card" data-tags="3d-vision,detection">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="card-title">
                 <a href="http://nyc3d.cs.cornell.edu/" target="_blank">
                   <strong>NYC3DCars: A Dataset of 3D Vehicles in Geographic Context</strong>
                 </a>
-              </h5>
+              </h3>
               <div class="card-text"><b>K Matzen</b>, <a href="https://www.cs.cornell.edu/~snavely/">N Snavely</a></div>
               <div class="card-text"><em>ICCV 2013</em></div>
               <div class="publication-tags">
@@ -1474,8 +1483,12 @@
     // Preload both profile images for seamless transitions
     const daytimeImg = new Image();
     const nightImg = new Image();
-    daytimeImg.src = 'images/daytime.jpg';
-    nightImg.src = 'images/night.jpg';
+    daytimeImg.src = 'images/daytime.webp';
+    nightImg.src = 'images/night.webp';
+    const daytimeImgFallback = new Image();
+    const nightImgFallback = new Image();
+    daytimeImgFallback.src = 'images/daytime.jpg';
+    nightImgFallback.src = 'images/night.jpg';
     
     // Track if a transition is in progress
     let isTransitioning = false;
@@ -1505,13 +1518,20 @@
       
       if (profileImgTop && profileImgBottom) {
         const newSrc = theme === 'dark' ? 'images/night.jpg' : 'images/daytime.jpg';
-        
+        const newWebpSrc = theme === 'dark' ? 'images/night.webp' : 'images/daytime.webp';
+
+        function updatePictureSources(img, jpgSrc, webpSrc) {
+          img.src = jpgSrc;
+          const source = img.closest('picture')?.querySelector('source[type="image/webp"]');
+          if (source) source.srcset = webpSrc;
+        }
+
         // Only change if the source is different
         if (profileImgTop.src.indexOf(newSrc) === -1) {
           if (skipTransition) {
             // No transition on initial load
-            profileImgTop.src = newSrc;
-            profileImgBottom.src = newSrc;
+            updatePictureSources(profileImgTop, newSrc, newWebpSrc);
+            updatePictureSources(profileImgBottom, newSrc, newWebpSrc);
             profileImgTop.style.opacity = '1';
             profileImgBottom.style.opacity = '0';
             profileImgBottom.style.visibility = 'hidden';
@@ -1523,7 +1543,7 @@
             const tempImg = new Image();
             tempImg.onload = () => {
               // Set the bottom image to the new source and ensure it starts at opacity 0
-              profileImgBottom.src = newSrc;
+              updatePictureSources(profileImgBottom, newSrc, newWebpSrc);
               profileImgBottom.style.opacity = '0';
               profileImgBottom.style.visibility = 'visible';
               
@@ -1546,7 +1566,7 @@
                 profileImgBottom.style.transition = 'none';
                 
                 // Update sources and opacity
-                profileImgTop.src = newSrc;
+                updatePictureSources(profileImgTop, newSrc, newWebpSrc);
                 profileImgTop.style.opacity = '1';
                 profileImgBottom.style.opacity = '0';
                 profileImgBottom.style.visibility = 'hidden';
